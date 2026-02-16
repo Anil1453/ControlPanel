@@ -1,0 +1,67 @@
+﻿@model KursovProekt1.Models.Room
+
+@{
+    ViewData["Title"] = "Добави стая";
+}
+
+<h1>Добави нова стая</h1>
+
+<hr />
+
+<!-- Форма за добавяне -->
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+
+            <!-- Име на стаята -->
+            <div class="form-group mb-3">
+                <label asp-for="RoomName" class="form-label">Име на стаята</label>
+                <input asp-for="RoomName" class="form-control" placeholder="Сървърна зала" />
+                <span asp-validation-for="RoomName" class="text-danger"></span>
+            </div>
+
+            <!-- Код на стаята -->
+            <div class="form-group mb-3">
+                <label asp-for="RoomCode" class="form-label">Код на стаята</label>
+                <input asp-for="RoomCode" class="form-control" placeholder="A101" />
+                <span asp-validation-for="RoomCode" class="text-danger"></span>
+            </div>
+
+            <!-- Описание -->
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="form-label">Описание</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Ниво на достъп -->
+            <div class="form-group mb-3">
+                <label asp-for="AccessLevel" class="form-label">Ниво на достъп</label>
+                <select asp-for="AccessLevel" class="form-control">
+                    <option value="1">1 - Всички</option>
+                    <option value="2">2 - Служители</option>
+                    <option value="3">3 - Мениджъри</option>
+                    <option value="4">4 - Администратор</option>
+                </select>
+            </div>
+
+            <!-- Активна -->
+            <div class="form-check mb-3">
+                <input asp-for="IsActive" class="form-check-input" type="checkbox" checked />
+                <label asp-for="IsActive" class="form-check-label">Активна стая</label>
+            </div>
+
+            <!-- Бутони -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">💾 Запази</button>
+                <a asp-action="Index" class="btn btn-secondary">❌ Отказ</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

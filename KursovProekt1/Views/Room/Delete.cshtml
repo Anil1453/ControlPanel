@@ -1,0 +1,45 @@
+﻿@model KursovProekt1.Models.Room
+
+@{
+    ViewData["Title"] = "Изтрий стая";
+}
+
+<h1>Изтрий стая</h1>
+
+<h3 class="text-danger">⚠️ Сигурен ли си, че искаш да изтриеш тази стая?</h3>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Име на стаята</dt>
+            <dd class="col-sm-9">@Model.RoomName</dd>
+
+            <dt class="col-sm-3">Код</dt>
+            <dd class="col-sm-9">@Model.RoomCode</dd>
+
+            <dt class="col-sm-3">Описание</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Ниво на достъп</dt>
+            <dd class="col-sm-9">@Model.AccessLevel</dd>
+
+            <dt class="col-sm-3">Активна</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">Да</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Не</span>
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">🗑️ Изтрий</button>
+    <a asp-action="Index" class="btn btn-secondary">❌ Отказ</a>
+</form>
