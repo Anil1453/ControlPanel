@@ -2,46 +2,85 @@
     ViewData["Title"] = "Начало";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Система за контрол на достъпа</h1>
-    <p>Добре дошли в административния панел</p>
+<style>
+    .hover-card {
+        display: block;
+        text-decoration: none !important;
+        transition: all 0.3s ease-in-out;
+        height: 100%; 
+    }
+
+        .hover-card:hover .card {
+            transform: translateY(-8px);
+            filter: brightness(1.15);
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.2) !important;
+        }
+</style>
+
+<div class="card border-0 shadow-sm rounded-4 mb-5 overflow-hidden bg-dark text-white">
+    <div class="card-body p-4 p-md-5 position-relative">
+        <div class="row align-items-center">
+
+            <div class="col-md-8">
+                <h2 class="fw-bold mb-2">👋 Добре дошли отново!</h2>
+                <p class="text-white-50 fs-5 mb-0">Всички системи работят нормално. Ето какво се случва в панела днес.</p>
+            </div>
+
+            <div class="col-md-4 text-md-end mt-4 mt-md-0">
+                <div class="bg-white bg-opacity-10 rounded-3 p-3 d-inline-block text-center border border-light border-opacity-25 shadow-sm">
+                    <span class="d-block fs-6 text-white-50 text-uppercase mb-1">📅 Днешна Дата</span>
+                    <span class="d-block fs-4 fw-bold text-light">@DateTime.Now.ToString("dd.MM.yyyy")</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-3">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Стаи</h5>
-                <p class="card-text display-4">@ViewBag.TotalRooms</p>
-                <a href="/Room/Index" class="btn btn-light">Преглед</a>
+<div class="row g-4">
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/Room/Index" class="hover-card">
+            <div class="card text-white bg-primary bg-gradient shadow rounded-4 border-0 h-100">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                    <h6 class="card-title text-uppercase fw-light mb-2">🚪 Общо Стаи</h6>
+                    <h1 class="display-3 fw-bold mb-0">@ViewBag.TotalRooms</h1>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-success mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Потребители</h5>
-                <p class="card-text display-4">@ViewBag.TotalUsers</p>
-                <a href="/User/Index" class="btn btn-light">Преглед</a>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/User/Index" class="hover-card">
+            <div class="card text-white bg-success bg-gradient shadow rounded-4 border-0 h-100">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                    <h6 class="card-title text-uppercase fw-light mb-2">👥 Потребители</h6>
+                    <h1 class="display-3 fw-bold mb-0">@ViewBag.TotalUsers</h1>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-info mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Логове</h5>
-                <p class="card-text display-4">@ViewBag.TotalLogs</p>
-                <a href="/AccessLog/Index" class="btn btn-light">Преглед</a>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/AccessLog/Index" class="hover-card">
+            <div class="card text-white bg-secondary bg-gradient shadow rounded-4 border-0 h-100">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                    <h6 class="card-title text-uppercase fw-light mb-2">📋 Последни Логове</h6>
+                    <h1 class="display-3 fw-bold mb-0">@ViewBag.TotalLogs</h1>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
-    <div class="col-md-3">
-        <div class="card text-white bg-warning mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Заявки</h5>
-                <p class="card-text display-4">@ViewBag.TotalRequests</p>
-                <a href="/AccessRequest/Index" class="btn btn-light">Преглед</a>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="/AccessRequest/Index" class="hover-card">
+            <div class="card text-white bg-danger bg-gradient shadow rounded-4 border-0 h-100">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                    <h6 class="card-title text-uppercase fw-light mb-2">📨 Нови Заявки</h6>
+                    <h1 class="display-3 fw-bold mb-0">@ViewBag.TotalRequests</h1>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
+
 </div>
