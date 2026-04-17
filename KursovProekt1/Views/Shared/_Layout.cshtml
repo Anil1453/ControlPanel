@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bg">
 <head>
     <meta charset="utf-8" />
@@ -11,172 +11,165 @@
 </head>
 <body>
 
-    @* ===== SIDEBAR ===== *@
-    <div class="cp-sidebar" id="sidebar">
+@* ===== SIDEBAR ===== *@
+<div class="cp-sidebar" id="sidebar">
 
-        <div class="cp-sidebar-logo">
-            <div class="cp-logo-icon">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="10" width="14" height="9" rx="2" stroke="white" stroke-width="1.5" />
-                    <path d="M7 10V7a3 3 0 0 1 6 0v3" stroke="white" stroke-width="1.5" stroke-linecap="round" />
-                    <circle cx="10" cy="14.5" r="1.5" fill="white" />
-                </svg>
-            </div>
-            <div class="cp-logo-text">
-                <span class="cp-logo-title">ControlPanel</span>
-                <span class="cp-logo-sub">v2.0</span>
-            </div>
+    <div class="cp-sidebar-logo">
+        <div class="cp-logo-icon">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="10" width="14" height="9" rx="2" stroke="white" stroke-width="1.5"/>
+                <path d="M7 10V7a3 3 0 0 1 6 0v3" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="10" cy="14.5" r="1.5" fill="white"/>
+            </svg>
         </div>
-
-        <nav class="cp-nav">
-            <div class="cp-nav-section-label">Навигация</div>
-
-            <a asp-controller="Home" asp-action="Index"
-               class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
-                <span class="cp-nav-icon">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 0 0-1.414 0l-7 7a1 1 0 0 0 1.414 1.414L4 10.414V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h2v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-7-7z" /></svg>
-                </span>
-                <span class="cp-nav-label">Начало</span>
-            </a>
-
-            <a asp-controller="Room" asp-action="Index"
-               class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Room" ? "active" : "")">
-                <span class="cp-nav-icon">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z" /></svg>
-                </span>
-                <span class="cp-nav-label">Зони за сигурност</span>
-            </a>
-
-            @if (User.IsInRole("Admin"))
-            {
-                <a asp-controller="AccessLog" asp-action="Index"
-                   class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "AccessLog" ? "active" : "")">
-                    <span class="cp-nav-icon">
-                        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd" /></svg>
-                    </span>
-                    <span class="cp-nav-label">Логове</span>
-                </a>
-            }
-
-            <a asp-controller="AccessRequest" asp-action="Index"
-               class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "AccessRequest" ? "active" : "")">
-                <span class="cp-nav-icon">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0 0 16 4H4a2 2 0 0 0-1.997 1.884z" /><path d="m18 8.118-8 4-8-4V14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.118z" /></svg>
-                </span>
-                <span class="cp-nav-label">Заявки</span>
-            </a>
-
-            @if (User.IsInRole("Admin"))
-            {
-                <a asp-controller="User" asp-action="Index"
-                   class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")">
-                    <span class="cp-nav-icon">
-                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM17 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 0 0-1.5-4.33A5 5 0 0 1 19 16v1h-6.07zM6 11a5 5 0 0 1 5 5v1H1v-1a5 5 0 0 1 5-5z" /></svg>
-                    </span>
-                    <span class="cp-nav-label">Потребители</span>
-                </a>
-            }
-        </nav>
-
-        <div class="cp-sidebar-footer">
-            @using Microsoft.AspNetCore.Identity
-            @using ControlPanel.Models
-            @inject SignInManager<ApplicationUser> SignInManager
-            @inject UserManager<ApplicationUser> UserManager
-
-            @if (SignInManager.IsSignedIn(User))
-            {
-                var currentUser = await UserManager.GetUserAsync(User);
-                var initials = currentUser?.Email?.Substring(0, 2).ToUpper() ?? "??";
-                <div class="cp-user-pill">
-                    <div class="cp-user-avatar">@initials</div>
-                    <div class="cp-user-info">
-                        <span class="cp-user-name">@(currentUser?.FullName ?? currentUser?.Email)</span>
-                        <span class="cp-user-role">
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <text>Администратор</text>
-                            }
-                            else if (User.IsInRole("Мениджър"))
-                            {
-
-                                <text>Мениджър</text>
-                            }
-                            else if (User.IsInRole("Служител"))
-                            {
-
-                                <text>Служител</text>
-                            }
-                            else
-                            {
-
-                                <text>Потребител</text>
-                            }
-                        </span>
-                    </div>
-                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
-                        <button type="submit" class="cp-logout-btn" title="Изход">
-                            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3zm11 4.414-1.414-1.414L9 9.586 6.414 7 5 8.414 9 12.414 14 7.414z" clip-rule="evenodd" /></svg>
-                        </button>
-                    </form>
-                </div>
-            }
-            else
-            {
-                <div class="cp-auth-links">
-                    <a asp-area="Identity" asp-page="/Account/Login" class="cp-auth-btn">Вход</a>
-                    <a asp-area="Identity" asp-page="/Account/Register" class="cp-auth-btn cp-auth-btn-outline">Регистрация</a>
-                </div>
-            }
+        <div class="cp-logo-text">
+            <span class="cp-logo-title">ControlPanel</span>
+            <span class="cp-logo-sub">v2.0</span>
         </div>
     </div>
 
-    @* ===== MAIN CONTENT ===== *@
-    <div class="cp-main">
+    <nav class="cp-nav">
+        <div class="cp-nav-section-label">Навигация</div>
 
-        <header class="cp-topbar">
-            <div class="cp-topbar-left">
-                <button class="cp-menu-toggle" id="menuToggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed')">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd" /></svg>
-                </button>
-                <div class="cp-breadcrumb">
-                    <span class="cp-breadcrumb-root">ControlPanel</span>
-                    <span class="cp-breadcrumb-sep">/</span>
-                    <span class="cp-breadcrumb-page">@ViewData["Title"]</span>
+        <a asp-controller="Home" asp-action="Index"
+           class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
+            <span class="cp-nav-icon">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 0 0-1.414 0l-7 7a1 1 0 0 0 1.414 1.414L4 10.414V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h2v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-7-7z"/></svg>
+            </span>
+            <span class="cp-nav-label">Начало</span>
+        </a>
+
+        <a asp-controller="Room" asp-action="Index"
+           class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Room" ? "active" : "")">
+            <span class="cp-nav-icon">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z"/></svg>
+            </span>
+            <span class="cp-nav-label">Зони за сигурност</span>
+        </a>
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Мениджър"))
+        {
+            <a asp-controller="AccessLog" asp-action="Index"
+               class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "AccessLog" ? "active" : "")">
+                <span class="cp-nav-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd"/></svg>
+                </span>
+                <span class="cp-nav-label">Логове</span>
+            </a>
+        }
+
+        <a asp-controller="AccessRequest" asp-action="Index"
+           class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "AccessRequest" ? "active" : "")">
+            <span class="cp-nav-icon">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0 0 16 4H4a2 2 0 0 0-1.997 1.884z"/><path d="m18 8.118-8 4-8-4V14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.118z"/></svg>
+            </span>
+            <span class="cp-nav-label">Заявки</span>
+        </a>
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Мениджър"))
+        {
+            <a asp-controller="User" asp-action="Index"
+               class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")">
+                <span class="cp-nav-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM17 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 0 0-1.5-4.33A5 5 0 0 1 19 16v1h-6.07zM6 11a5 5 0 0 1 5 5v1H1v-1a5 5 0 0 1 5-5z"/></svg>
+                </span>
+                <span class="cp-nav-label">Потребители</span>
+            </a>
+        }
+
+        <a asp-controller="Home" asp-action="Roles"
+           class="cp-nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Roles" ? "active" : "")">
+            <span class="cp-nav-icon">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0 0 10 1.944 11.954 11.954 0 0 0 17.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 0 0-1.414-1.414L9 10.586 7.707 9.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4z" clip-rule="evenodd"/></svg>
+            </span>
+            <span class="cp-nav-label">Роли и права</span>
+        </a>
+    </nav>
+
+    <div class="cp-sidebar-footer">
+        @using Microsoft.AspNetCore.Identity
+        @using ControlPanel.Models
+        @inject SignInManager<ApplicationUser> SignInManager
+        @inject UserManager<ApplicationUser> UserManager
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            var currentUser = await UserManager.GetUserAsync(User);
+            var initials = currentUser?.Email?.Substring(0, 2).ToUpper() ?? "??";
+            <div class="cp-user-pill">
+                <div class="cp-user-avatar">@initials</div>
+                <div class="cp-user-info">
+                    <span class="cp-user-name">@(currentUser?.FullName ?? currentUser?.Email)</span>
+                    <span class="cp-user-role">
+                        @if (User.IsInRole("Admin")) { <text>Администратор</text> }
+                        else if (User.IsInRole("Мениджър")) { <text>Мениджър</text> }
+                        else if (User.IsInRole("Служител")) { <text>Служител</text> }
+                        else { <text>Потребител</text> }
+                    </span>
                 </div>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                    <button type="submit" class="cp-logout-btn" title="Изход">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3zm11 4.414-1.414-1.414L9 9.586 6.414 7 5 8.414 9 12.414 14 7.414z" clip-rule="evenodd"/></svg>
+                    </button>
+                </form>
             </div>
-            <div class="cp-topbar-right">
-                <div class="cp-topbar-date">@DateTime.Now.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("bg-BG"))</div>
+        }
+        else
+        {
+            <div class="cp-auth-links">
+                <a asp-area="Identity" asp-page="/Account/Login" class="cp-auth-btn">Вход</a>
+                <a asp-area="Identity" asp-page="/Account/Register" class="cp-auth-btn cp-auth-btn-outline">Регистрация</a>
             </div>
-        </header>
-
-        <main class="cp-content">
-            @if (TempData["Success"] != null)
-            {
-                <div class="cp-alert cp-alert-success">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm3.707-9.293a1 1 0 0 0-1.414-1.414L9 10.586 7.707 9.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4z" clip-rule="evenodd" /></svg>
-                    @TempData["Success"]
-                </div>
-            }
-            @if (TempData["Error"] != null)
-            {
-                <div class="cp-alert cp-alert-danger">
-                    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0zm-7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1-9a1 1 0 0 0-1 1v4a1 1 0 1 1 2 0V6a1 1 0 0 0-1-1z" clip-rule="evenodd" /></svg>
-                    @TempData["Error"]
-                </div>
-            }
-
-            @RenderBody()
-        </main>
-
-        <footer class="cp-footer">
-            <span>&copy; 2026 ControlPanel — ПГМЕТ „Христо Ботев", Шумен</span>
-        </footer>
+        }
     </div>
+</div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+@* ===== MAIN CONTENT ===== *@
+<div class="cp-main">
+
+    <header class="cp-topbar">
+        <div class="cp-topbar-left">
+            <button class="cp-menu-toggle" id="menuToggle" onclick="document.getElementById('sidebar').classList.toggle('collapsed')">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd"/></svg>
+            </button>
+            <div class="cp-breadcrumb">
+                <span class="cp-breadcrumb-root">ControlPanel</span>
+                <span class="cp-breadcrumb-sep">/</span>
+                <span class="cp-breadcrumb-page">@ViewData["Title"]</span>
+            </div>
+        </div>
+        <div class="cp-topbar-right">
+            <div class="cp-topbar-date">@DateTime.Now.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("bg-BG"))</div>
+        </div>
+    </header>
+
+    <main class="cp-content">
+        @if (TempData["Success"] != null)
+        {
+            <div class="cp-alert cp-alert-success">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm3.707-9.293a1 1 0 0 0-1.414-1.414L9 10.586 7.707 9.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4z" clip-rule="evenodd"/></svg>
+                @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="cp-alert cp-alert-danger">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0zm-7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1-9a1 1 0 0 0-1 1v4a1 1 0 1 1 2 0V6a1 1 0 0 0-1-1z" clip-rule="evenodd"/></svg>
+                @TempData["Error"]
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="cp-footer">
+        <span>&copy; 2026 ControlPanel — ПГМЕТ „Христо Ботев", Шумен</span>
+    </footer>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

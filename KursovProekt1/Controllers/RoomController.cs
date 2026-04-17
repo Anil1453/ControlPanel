@@ -1,151 +1,111 @@
-﻿using ControlPanel.Data;
+using ControlPanel.Data;
 using ControlPanel.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization; // Za yetkite
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlPanel.Controllers
 {
-    // [Authorize] = Samo vlezli potrebiteli mogat da vlqzat
-    // Roles = "Admin" = Samo potrebiteli s Admin rolq
-    [Authorize(Roles = "Admin")]
     public class RoomController : Controller
     {
-        // Vruzka s bazata danni
         private readonly ApplicationDbContext _context;
 
-        // Konstruktor - poluchava bazata danni
         public RoomController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Room/Index - pokazva vsichki stai
-        // [AllowAnonymous] = Vseki moje da vidi (dori i bez login)
+        // Herkes görebilir
         [AllowAnonymous]
         public IActionResult Index()
         {
-            // Vzimame vsichki stai ot bazata
-            var rooms = _context.Rooms.ToList();
-
-            // Izprashtame gi kum View
-            return View(rooms);
+            return View(_context.Rooms.ToList());
         }
 
-        // GET: Room/Details/5 - pokazva detaili za edna staq
+        // Herkes görebilir
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var room = _context.Rooms.Find(id);
             if (room == null) return NotFound();
 
-            // Bu zonaya erişimi onaylanan kullanıcılar
             var usersWithAccess = _context.AccessRequests
                 .Include(r => r.User)
                 .Where(r => r.RoomId == id && r.Status == "Approved")
                 .ToList();
 
             ViewBag.UsersWithAccess = usersWithAccess;
-
             return View(room);
         }
 
-        // GET: Room/Create - pokazva formata za suzdavane
+        // Admin ve Мениджър ekleyebilir
+        [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Room/Create - zapisva novata staq v bazata
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Create(Room room)
         {
-            // Proverka dali dannite sa validni
             if (ModelState.IsValid)
             {
-                // Dobavi staqta v bazata
                 _context.Rooms.Add(room);
-
-                // Zapazi promenite
                 _context.SaveChanges();
-
-                // Prenasochi kum spisuka sus stai
+                TempData["Success"] = "Зоната е добавена успешно!";
                 return RedirectToAction("Index");
             }
-
-            // Ako ima greshki, pokaji otnovo formata
             return View(room);
         }
 
-        // GET: Room/Edit/5 - pokazva formata za redaktirane
+        [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Edit(int id)
         {
-            // Nameri staqta
             var room = _context.Rooms.Find(id);
-
-            if (room == null)
-            {
-                return NotFound();
-            }
-
+            if (room == null) return NotFound();
             return View(room);
         }
 
-        // POST: Room/Edit/5 - zapisva promenite
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Edit(int id, Room room)
         {
-            // Proverka dali ID-tata suvpadat
-            if (id != room.Id)
-            {
-                return NotFound();
-            }
+            if (id != room.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                // Aktualizirai staqta
                 _context.Update(room);
-
-                // Zapazi promenite
                 _context.SaveChanges();
-
+                TempData["Success"] = "Зоната е обновена успешно!";
                 return RedirectToAction("Index");
             }
-
             return View(room);
         }
 
-        // GET: Room/Delete/5 - pokazva potvurjdenie za iztrivane
+        // Sadece Admin silebilir
+        [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Delete(int id)
         {
             var room = _context.Rooms.Find(id);
-
-            if (room == null)
-            {
-                return NotFound();
-            }
-
+            if (room == null) return NotFound();
             return View(room);
         }
 
-        // POST: Room/Delete/5 - iztriva staqta
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult DeleteConfirmed(int id)
         {
-            // Nameri staqta
             var room = _context.Rooms.Find(id);
-
             if (room != null)
             {
-                // Iztrii q
                 _context.Rooms.Remove(room);
-
-                // Zapazi promenite
                 _context.SaveChanges();
+                TempData["Success"] = "Зоната е изтрита успешно!";
             }
-
             return RedirectToAction("Index");
         }
     }

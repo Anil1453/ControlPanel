@@ -1,4 +1,4 @@
-﻿using ControlPanel.Data;
+using ControlPanel.Data;
 using ControlPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlPanel.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    // Admin ve Мениджър logları görebilir
+    [Authorize(Roles = "Admin,Мениджър")]
     public class AccessLogController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,7 +17,6 @@ namespace ControlPanel.Controllers
             _context = context;
         }
 
-        // Показва логовете, може да се филтрира по статус
         public IActionResult Index(string status)
         {
             var logs = _context.AccessLogs
@@ -24,14 +24,10 @@ namespace ControlPanel.Controllers
                 .Include(a => a.Room)
                 .AsQueryable();
 
-            // Ако е избран статус - филтрирай
             if (!string.IsNullOrEmpty(status))
-            {
                 logs = logs.Where(a => a.Status == status);
-            }
 
             ViewBag.SelectedStatus = status;
-
             return View(logs.OrderByDescending(a => a.EntryTime).ToList());
         }
     }

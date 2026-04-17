@@ -1,0 +1,141 @@
+@{
+    ViewData["Title"] = "Роли и права";
+}
+
+<div class="cp-page-header">
+    <div>
+        <div class="cp-page-title">Роли и права</div>
+        <div class="cp-page-subtitle">Преглед на правата за всяка роля в системата</div>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:24px">
+
+    @* Потребител *@
+    <div class="cp-card">
+        <div class="cp-card-header">
+            <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:36px;height:36px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center">
+                    <svg style="width:18px;height:18px;color:#6b7280" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-7 9a7 7 0 1 1 14 0H3z" clip-rule="evenodd"/></svg>
+                </div>
+                <div>
+                    <div style="font-size:15px;font-weight:600">Потребител</div>
+                    <div style="font-size:12px;color:var(--muted)">Базова роля</div>
+                </div>
+            </div>
+            <span class="cp-badge cp-badge-gray">Ниво 1</span>
+        </div>
+        <div class="cp-card-body" style="display:flex;flex-direction:column;gap:10px">
+            <div class="role-item yes">Преглед на зоните за сигурност</div>
+            <div class="role-item yes">Изпращане на заявки за достъп</div>
+            <div class="role-item yes">Преглед на собствените заявки</div>
+            <div class="role-item no">Одобряване на заявки</div>
+            <div class="role-item no">Управление на зони</div>
+            <div class="role-item no">Преглед на логове</div>
+            <div class="role-item no">Промяна на роли</div>
+        </div>
+    </div>
+
+    @* Служител *@
+    <div class="cp-card">
+        <div class="cp-card-header">
+            <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:36px;height:36px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center">
+                    <svg style="width:18px;height:18px;color:#2563eb" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 6V5a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3v1h2a2 2 0 0 1 2 2v3.57A22.952 22.952 0 0 1 10 13a22.95 22.95 0 0 1-8-1.43V8a2 2 0 0 1 2-2h2zm2-1a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1H8V5zm1 5a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2H10a1 1 0 0 1-1-1z" clip-rule="evenodd"/><path d="M2 13.692V16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.308A24.974 24.974 0 0 1 10 15c-2.796 0-5.487-.46-8-1.308z"/></svg>
+                </div>
+                <div>
+                    <div style="font-size:15px;font-weight:600">Служител</div>
+                    <div style="font-size:12px;color:var(--muted)">Може да одобрява заявки</div>
+                </div>
+            </div>
+            <span class="cp-badge cp-badge-blue">Ниво 2</span>
+        </div>
+        <div class="cp-card-body" style="display:flex;flex-direction:column;gap:10px">
+            <div class="role-item yes">Преглед на зоните за сигурност</div>
+            <div class="role-item yes">Изпращане на заявки за достъп</div>
+            <div class="role-item yes">Преглед на собствените заявки</div>
+            <div class="role-item yes">Одобряване и отказване на заявки</div>
+            <div class="role-item no">Управление на зони</div>
+            <div class="role-item no">Преглед на логове</div>
+            <div class="role-item no">Промяна на роли</div>
+        </div>
+    </div>
+
+    @* Мениджър *@
+    <div class="cp-card">
+        <div class="cp-card-header">
+            <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:36px;height:36px;border-radius:50%;background:#fffbeb;display:flex;align-items:center;justify-content:center">
+                    <svg style="width:18px;height:18px;color:#d97706" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM14 15a4 4 0 0 0-8 0v3h8v-3zM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM16 18v-3a5.972 5.972 0 0 0-.75-2.906A3.005 3.005 0 0 1 19 15v3h-3zM4.75 12.094A5.973 5.973 0 0 0 4 15v3H1v-3a3 3 0 0 1 3.75-2.906z"/></svg>
+                </div>
+                <div>
+                    <div style="font-size:15px;font-weight:600">Мениджър</div>
+                    <div style="font-size:12px;color:var(--muted)">Управлява зони и потребители</div>
+                </div>
+            </div>
+            <span class="cp-badge cp-badge-amber">Ниво 3</span>
+        </div>
+        <div class="cp-card-body" style="display:flex;flex-direction:column;gap:10px">
+            <div class="role-item yes">Преглед на зоните за сигурност</div>
+            <div class="role-item yes">Изпращане на заявки за достъп</div>
+            <div class="role-item yes">Преглед на собствените заявки</div>
+            <div class="role-item yes">Одобряване и отказване на заявки</div>
+            <div class="role-item yes">Добавяне и изтриване на зони</div>
+            <div class="role-item yes">Преглед на логове за достъп</div>
+            <div class="role-item yes">Промяна Потребител → Служител</div>
+            <div class="role-item no">Пълно управление на потребители</div>
+        </div>
+    </div>
+
+    @* Admin *@
+    <div class="cp-card" style="border-color:#2563eb">
+        <div class="cp-card-header" style="background:#eff6ff">
+            <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center">
+                    <svg style="width:18px;height:18px;color:#fff" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0 0 10 1.944 11.954 11.954 0 0 0 17.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 0 0-1.414-1.414L9 10.586 7.707 9.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4z" clip-rule="evenodd"/></svg>
+                </div>
+                <div>
+                    <div style="font-size:15px;font-weight:600;color:#1e40af">Администратор</div>
+                    <div style="font-size:12px;color:#3b82f6">Пълен достъп до системата</div>
+                </div>
+            </div>
+            <span class="cp-badge cp-badge-blue">Ниво 4</span>
+        </div>
+        <div class="cp-card-body" style="display:flex;flex-direction:column;gap:10px">
+            <div class="role-item yes">Всички права на Мениджър</div>
+            <div class="role-item yes">Пълно управление на потребители</div>
+            <div class="role-item yes">Промяна на всякакви роли</div>
+            <div class="role-item yes">Достъп до всички зони</div>
+            <div class="role-item yes">Пълен преглед на логове</div>
+            <div class="role-item yes">Системни настройки</div>
+        </div>
+    </div>
+
+</div>
+
+@* Легенда *@
+<div class="cp-card" style="max-width:400px">
+    <div class="cp-card-header">
+        <span class="cp-card-title">Легенда</span>
+    </div>
+    <div class="cp-card-body" style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+            <span style="color:#16a34a;font-size:16px;font-weight:700">✓</span>
+            <span>Разрешено — тази роля има това право</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+            <span style="color:#dc2626;font-size:16px;font-weight:700">✕</span>
+            <span>Забранено — тази роля няма това право</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .role-item { display:flex; align-items:center; gap:10px; font-size:13px; padding:6px 0; border-bottom:1px solid var(--border); }
+    .role-item:last-child { border-bottom:none; }
+    .role-item::before { font-size:15px; font-weight:700; flex-shrink:0; }
+    .role-item.yes { color:var(--text); }
+    .role-item.yes::before { content:"✓"; color:#16a34a; }
+    .role-item.no { color:var(--muted); }
+    .role-item.no::before { content:"✕"; color:#dc2626; }
+</style>

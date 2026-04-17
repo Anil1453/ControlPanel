@@ -1,11 +1,11 @@
-﻿using ControlPanel.Models;
+using ControlPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlPanel.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Мениджър")]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -15,7 +15,6 @@ namespace ControlPanel.Controllers
             _userManager = userManager;
         }
 
-        // Показва всички потребители
         public async Task<IActionResult> Index()
         {
             var users = _userManager.Users.ToList();
@@ -31,25 +30,40 @@ namespace ControlPanel.Controllers
             return View(users);
         }
 
-        // Промени ролята
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeRole(string userId, string newRole)
         {
             var user = await _userManager.FindByIdAsync(userId);
-
-            // Не позволявай промяна на Админ
             var roles = await _userManager.GetRolesAsync(user);
+
+            // Admin rolü değiştirilemez
             if (roles.Contains("Admin"))
             {
-                TempData["Error"] = "Не може да се промени ролята на Админ!";
+                TempData["Error"] = "Не може да се промени ролята на Администратор!";
                 return RedirectToAction("Index");
+            }
+
+            // Мениджър sadece Потребител → Служител yapabilir, daha fazlasını sadece Admin
+            if (User.IsInRole("Мениджър") && !User.IsInRole("Admin"))
+            {
+                if (newRole != "Служител" && newRole != "Потребител")
+                {
+                    TempData["Error"] = "Мениджърът може да задава само роля Служител или Потребител!";
+                    return RedirectToAction("Index");
+                }
+                // Мениджър kendi rolünü değiştiremez
+                if (roles.Contains("Мениджър"))
+                {
+                    TempData["Error"] = "Не може да се промени ролята на друг Мениджър!";
+                    return RedirectToAction("Index");
+                }
             }
 
             await _userManager.RemoveFromRolesAsync(user, roles);
             await _userManager.AddToRoleAsync(user, newRole);
 
-            TempData["Success"] = "Ролята е променена!";
+            TempData["Success"] = "Ролята е променена успешно!";
             return RedirectToAction("Index");
         }
     }

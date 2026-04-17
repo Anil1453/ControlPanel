@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Логове";
+    int approved = Model.Count(l => l.Status == "Approved");
+    int denied   = Model.Count(l => l.Status == "Denied");
+    int pending  = Model.Count(l => l.Status == "Pending");
+    int total    = Model.Count();
 }
 
 <div class="cp-page-header">
@@ -10,6 +14,96 @@
         <div class="cp-page-subtitle">История на всички влизания и откази</div>
     </div>
 </div>
+
+@* Pasta grafiği — veri varsa göster *@
+@if (total > 0)
+{
+    <div class="cp-grid-2" style="margin-bottom:20px">
+        <div class="cp-card">
+            <div class="cp-card-header">
+                <span class="cp-card-title">Разпределение на достъпа</span>
+                <span style="font-size:12px;color:var(--muted)">Общо @total записа</span>
+            </div>
+            <div class="cp-card-body" style="display:flex;align-items:center;gap:32px">
+                <canvas id="logChart" width="160" height="160" style="flex-shrink:0"></canvas>
+                <div style="flex:1">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+                        <div style="width:14px;height:14px;border-radius:3px;background:#16a34a;flex-shrink:0"></div>
+                        <div style="flex:1;font-size:14px">Одобрен</div>
+                        <div style="font-size:20px;font-weight:700;color:#16a34a">@approved</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+                        <div style="width:14px;height:14px;border-radius:3px;background:#dc2626;flex-shrink:0"></div>
+                        <div style="flex:1;font-size:14px">Отказан</div>
+                        <div style="font-size:20px;font-weight:700;color:#dc2626">@denied</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <div style="width:14px;height:14px;border-radius:3px;background:#d97706;flex-shrink:0"></div>
+                        <div style="flex:1;font-size:14px">В изчакване</div>
+                        <div style="font-size:20px;font-weight:700;color:#d97706">@pending</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cp-card">
+            <div class="cp-card-header">
+                <span class="cp-card-title">Обобщение</span>
+            </div>
+            <div class="cp-card-body" style="display:flex;flex-direction:column;gap:12px">
+                @{
+                    double approvedPct = total > 0 ? Math.Round((double)approved / total * 100) : 0;
+                    double deniedPct   = total > 0 ? Math.Round((double)denied   / total * 100) : 0;
+                    double pendingPct  = total > 0 ? Math.Round((double)pending  / total * 100) : 0;
+                }
+                <div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px">
+                        <span>Одобрени</span><span style="font-weight:600;color:#16a34a">@approvedPct%</span>
+                    </div>
+                    <div style="height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden">
+                        <div style="height:100%;width:@approvedPct%;background:#16a34a;border-radius:4px;transition:width .6s"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px">
+                        <span>Отказани</span><span style="font-weight:600;color:#dc2626">@deniedPct%</span>
+                    </div>
+                    <div style="height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden">
+                        <div style="height:100%;width:@deniedPct%;background:#dc2626;border-radius:4px;transition:width .6s"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:13px">
+                        <span>В изчакване</span><span style="font-weight:600;color:#d97706">@pendingPct%</span>
+                    </div>
+                    <div style="height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden">
+                        <div style="height:100%;width:@pendingPct%;background:#d97706;border-radius:4px;transition:width .6s"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+        new Chart(document.getElementById('logChart'), {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [@approved, @denied, @pending],
+                    backgroundColor: ['#16a34a', '#dc2626', '#d97706'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                animation: { duration: 900 }
+            }
+        });
+    </script>
+}
 
 <div class="cp-filter-bar">
     <form method="get" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -33,12 +127,10 @@
         </select>
         @if (!string.IsNullOrEmpty(ViewBag.SelectedStatus as string))
         {
-            <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="height:34px;padding:0 10px;font-size:12px">Изчисти филтъра ×</a>
+            <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="height:34px;padding:0 10px;font-size:12px">Изчисти ×</a>
         }
     </form>
-    <span style="font-size:12px;color:var(--text-muted);margin-left:auto">
-        @Model.Count() записа
-    </span>
+    <span style="font-size:12px;color:var(--muted);margin-left:auto">@Model.Count() записа</span>
 </div>
 
 <div class="cp-card">
@@ -49,7 +141,7 @@
                 <thead>
                     <tr>
                         <th>Потребител</th>
-                        <th>Стая</th>
+                        <th>Зона</th>
                         <th>Влизане</th>
                         <th>Излизане</th>
                         <th>Статус</th>
@@ -62,39 +154,22 @@
                         <tr>
                             <td>
                                 <div style="display:flex;align-items:center;gap:8px">
-                                    <div class="cp-avatar">@(log.User?.Email?.Substring(0, 2).ToUpper() ?? "??")</div>
-                                    <span style="font-size:13px;font-weight:500">@(log.User?.Email ?? "—")</span>
+                                    <div class="cp-avatar">@(log.User?.Email?.Substring(0,2).ToUpper() ?? "??")</div>
+                                    <span style="font-weight:500">@(log.User?.Email ?? "—")</span>
                                 </div>
                             </td>
                             <td style="font-weight:500">@(log.Room?.RoomName ?? "—")</td>
-                            <td style="color:var(--text-secondary);font-size:12px">@log.EntryTime.ToString("dd.MM.yyyy HH:mm")</td>
-                            <td style="color:var(--text-secondary);font-size:12px">
-                                @if (log.ExitTime.HasValue)
-                                {
-                                    @log.ExitTime.Value.ToString("dd.MM.yyyy HH:mm")
-                                }
-                                else
-                                {
-                                    <span style="color:var(--text-muted)">—</span>
-                                }
+                            <td style="color:var(--muted);font-size:13px">@log.EntryTime.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td style="color:var(--muted);font-size:13px">
+                                @if (log.ExitTime.HasValue) { @log.ExitTime.Value.ToString("dd.MM.yyyy HH:mm") }
+                                else { <span style="color:var(--hint)">—</span> }
                             </td>
                             <td>
-                                @if (log.Status == "Approved")
-                                {
-                                    <span class="cp-badge cp-badge-green"><span class="dot"></span> Одобрен</span>
-                                }
-                                else if (log.Status == "Denied")
-                                {
-                                    <span class="cp-badge cp-badge-red"><span class="dot"></span> Отказан</span>
-                                }
-                                else
-                                {
-                                    <span class="cp-badge cp-badge-amber"><span class="dot"></span> В изчакване</span>
-                                }
+                                @if (log.Status == "Approved") { <span class="cp-badge cp-badge-green"><span class="dot"></span> Одобрен</span> }
+                                else if (log.Status == "Denied") { <span class="cp-badge cp-badge-red"><span class="dot"></span> Отказан</span> }
+                                else { <span class="cp-badge cp-badge-amber"><span class="dot"></span> В изчакване</span> }
                             </td>
-                            <td style="color:var(--text-secondary);font-size:12px">
-                                @(string.IsNullOrEmpty(log.Notes) ? "—" : log.Notes)
-                            </td>
+                            <td style="color:var(--muted);font-size:13px">@(string.IsNullOrEmpty(log.Notes) ? "—" : log.Notes)</td>
                         </tr>
                     }
                 </tbody>
@@ -103,20 +178,9 @@
         else
         {
             <div class="cp-empty">
-                <div class="cp-empty-icon">
-                    <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd"/></svg>
-                </div>
+                <div class="cp-empty-icon"><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd"/></svg></div>
                 <div class="cp-empty-title">Няма намерени логове</div>
-                <div class="cp-empty-sub">
-                    @if (string.IsNullOrEmpty(ViewBag.SelectedStatus as string))
-                    {
-                        <text>Все още няма записани влизания.</text>
-                    }
-                    else
-                    {
-                        <text>Няма логове с избрания статус.</text>
-                    }
-                </div>
+                <div class="cp-empty-sub">@(string.IsNullOrEmpty(ViewBag.SelectedStatus as string) ? "Все още няма записани влизания." : "Няма логове с избрания статус.")</div>
             </div>
         }
     </div>

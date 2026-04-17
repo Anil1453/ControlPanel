@@ -52,5 +52,10 @@ namespace ControlPanel.Controllers
         {
             return View("~/Views/Shared/AccessDenied.cshtml");
         }
+
+        public IActionResult Roles()
+        {
+            return View();
+        }
     }
 }
