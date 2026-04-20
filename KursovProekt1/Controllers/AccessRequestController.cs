@@ -73,7 +73,7 @@ namespace ControlPanel.Controllers
             _context.AccessRequests.Add(novaZayavka);
             await _context.SaveChangesAsync();
 
-            // Pending log oluştur
+            // Pending log създай
             var log = new AccessLog { UserId = userId, RoomId = roomId, EntryTime = DateTime.Now, Status = "Pending" };
             _context.AccessLogs.Add(log);
             await _context.SaveChangesAsync();
@@ -82,7 +82,7 @@ namespace ControlPanel.Controllers
             return RedirectToAction("Index");
         }
 
-        // Служител, Мениджър и Admin onaylayabilir
+        // Служител, Мениджър и Admin може да одобрят
         [HttpPost]
         [Authorize(Roles = "Admin,Мениджър,Служител")]
         public async Task<IActionResult> Approve(int id)
