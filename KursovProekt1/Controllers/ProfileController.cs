@@ -37,10 +37,10 @@ namespace ControlPanel.Controllers
             user.FullName = fullName;
             user.Department = department;
 
-            // Resim yüklendi mi?
+            // качи ли снимка?
             if (profilePicture != null && profilePicture.Length > 0)
             {
-                // Sadece resim dosyaları kabul et
+                // приеми само снимки
                 var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/webp" };
                 if (!allowedTypes.Contains(profilePicture.ContentType))
                 {
@@ -55,12 +55,12 @@ namespace ControlPanel.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Uploads klasörünü oluştur
+                // създай Uploads папка
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
-                // Dosya adı: profil_USERID.jpg gibi
+                // Име на файла като: profil_USERID.jpg
                 var extension = Path.GetExtension(profilePicture.FileName);
                 var fileName = $"profil_{user.Id}{extension}";
                 var filePath = Path.Combine(uploadsFolder, fileName);

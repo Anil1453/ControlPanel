@@ -37,14 +37,14 @@ namespace ControlPanel.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             var roles = await _userManager.GetRolesAsync(user);
 
-            // Admin rolü değiştirilemez
+            // Admin Не може да сменя роли
             if (roles.Contains("Admin"))
             {
                 TempData["Error"] = "Не може да се промени ролята на Администратор!";
                 return RedirectToAction("Index");
             }
 
-            // Мениджър sadece Потребител → Служител yapabilir, daha fazlasını sadece Admin
+            // Мениджър само Потребител → Служител може да направи, по-вечето само Admin
             if (User.IsInRole("Мениджър") && !User.IsInRole("Admin"))
             {
                 if (newRole != "Служител" && newRole != "Потребител")
@@ -52,7 +52,7 @@ namespace ControlPanel.Controllers
                     TempData["Error"] = "Мениджърът може да задава само роля Служител или Потребител!";
                     return RedirectToAction("Index");
                 }
-                // Мениджър kendi rolünü değiştiremez
+                // Мениджър не може да редактира своята роля
                 if (roles.Contains("Мениджър"))
                 {
                     TempData["Error"] = "Не може да се промени ролята на друг Мениджър!";

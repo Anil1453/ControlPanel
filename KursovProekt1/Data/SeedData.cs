@@ -5,13 +5,13 @@ namespace ControlPanel.Data
 {
     public static class SeedData
     {
-        // Program baslayinca bu metod calisir
+        // Този метод се включва когато се стартира приложението
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            // Rol yoneticisi (roli suzdava)
+            // (roli suzdava)
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Potrebitel yoneticisi (potrebiteli suzdava)
+            // (potrebiteli suzdava)
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             // 2 rola: Admin i User

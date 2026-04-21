@@ -15,11 +15,11 @@
 
 <div class="cp-grid-2">
 
-    @* Sol — profil kartı *@
+    @* Ляво - профилна карта *@
     <div class="cp-card">
         <div class="cp-card-body" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:32px 20px">
 
-            @* Profil resmi *@
+            @* Профилна снимка *@
             <div style="position:relative;margin-bottom:20px">
                 @if (hasPhoto)
                 {
@@ -37,7 +37,7 @@
             <div style="font-size:18px;font-weight:700;margin-bottom:4px">@(Model.FullName ?? "—")</div>
             <div style="font-size:13px;color:var(--muted);margin-bottom:8px">@Model.Email</div>
 
-            @* Rol badge *@
+            @* Роля badge *@
             @{
                 var role = ViewBag.Role as string;
             }
@@ -50,7 +50,7 @@
             else
             { <span class="cp-badge cp-badge-gray" style="margin-bottom:20px">Потребител</span> }
 
-            @* Mini istatistikler *@
+            @* Мини истатистики *@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-top:8px">
                 <div style="background:var(--gray-bg);border-radius:var(--r);padding:12px;text-align:center">
                     <div style="font-size:22px;font-weight:700;color:var(--text)">@ViewBag.TotalRequests</div>
@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    @* Sağ — düzenleme formu *@
+    @* Дясно - Форма за редактиране *@
     <div style="display:flex;flex-direction:column;gap:20px">
 
         <div class="cp-card">
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        @* Resim kaldırma — sadece resim varsa *@
+        @* Премахване на снимката - ако има само една *@
         @if (hasPhoto)
         {
             <div class="cp-card">

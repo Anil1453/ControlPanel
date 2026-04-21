@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlPanel.Controllers
 {
-    // Admin ve Мениджър logları görebilir
+    // Admin ve Мениджър могат да виждат логовете
     [Authorize(Roles = "Admin,Мениджър")]
     public class AccessLogController : Controller
     {

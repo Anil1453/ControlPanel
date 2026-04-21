@@ -20,7 +20,7 @@ namespace ControlPanel.Controllers
             ViewBag.TotalLogs     = _context.AccessLogs.Count();
             ViewBag.TotalRequests = _context.AccessRequests.Count();
 
-            // Son 5 log
+            // последни 5 лога
             ViewBag.RecentLogs = _context.AccessLogs
                 .Include(a => a.User)
                 .Include(a => a.Room)
@@ -28,14 +28,14 @@ namespace ControlPanel.Controllers
                 .Take(5)
                 .ToList();
 
-            // Son 5 zona
+            // последни 5 зони
             ViewBag.RecentRooms = _context.Rooms
                 .Where(r => r.IsActive)
                 .OrderBy(r => r.RoomName)
                 .Take(5)
                 .ToList();
 
-            // Pasta grafiği için log istatistikleri
+            // лог истатискити за паста диаграма
             ViewBag.ApprovedLogs = _context.AccessLogs.Count(a => a.Status == "Approved");
             ViewBag.DeniedLogs   = _context.AccessLogs.Count(a => a.Status == "Denied");
             ViewBag.PendingLogs  = _context.AccessLogs.Count(a => a.Status == "Pending");

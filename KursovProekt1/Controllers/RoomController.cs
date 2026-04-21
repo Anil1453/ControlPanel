@@ -15,14 +15,14 @@ namespace ControlPanel.Controllers
             _context = context;
         }
 
-        // Herkes görebilir
+        // Всички могат да виждат
         [AllowAnonymous]
         public IActionResult Index()
         {
             return View(_context.Rooms.ToList());
         }
 
-        // Herkes görebilir
+        // Всички могат да виждат
         [AllowAnonymous]
         public IActionResult Details(int id)
         {
@@ -38,7 +38,7 @@ namespace ControlPanel.Controllers
             return View(room);
         }
 
-        // Admin ve Мениджър ekleyebilir
+        // Admin ve Мениджър могат да добавят
         [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Create()
         {
@@ -85,7 +85,7 @@ namespace ControlPanel.Controllers
             return View(room);
         }
 
-        // Sadece Admin silebilir
+        // Само Admin може да изтрива
         [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Delete(int id)
         {

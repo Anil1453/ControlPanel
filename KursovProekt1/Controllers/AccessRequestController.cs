@@ -24,7 +24,7 @@ namespace ControlPanel.Controllers
             var userId = _userManager.GetUserId(User);
             List<AccessRequest> requests;
 
-            // Admin ve Мениджър ve Служител hepsini görür
+            // Admin ve Мениджър ve Служител виждат всичко
             if (User.IsInRole("Admin") || User.IsInRole("Мениджър") || User.IsInRole("Служител"))
             {
                 requests = await _context.AccessRequests

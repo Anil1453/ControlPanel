@@ -15,7 +15,7 @@ namespace ControlPanel.Models
 
         public bool IsActive { get; set; } = true;
 
-        // Profil resmi dosya adı (wwwroot/uploads/ klasöründe saklanır)
+        // Името на файла на профилната снимка се захранява на:(wwwroot/uploads/)
         [StringLength(200)]
         public string? ProfilePicture { get; set; }
 
