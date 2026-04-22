@@ -8,10 +8,10 @@ namespace ControlPanel.Data
         // Program baslayinca bu metod calisir
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            // Rol yoneticisi (roli suzdava)
+            // Rol yoneticisi roli suzdava
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Potrebitel yoneticisi (potrebiteli suzdava)
+            // Potrebitel yoneticisi potrebiteli suzdava
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             // 2 rola: Admin i User
