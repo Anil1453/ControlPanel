@@ -1,22 +1,34 @@
+@* Моделът е списък от стаи (зони) *@
 @model IEnumerable<ControlPanel.Models.Room>
 
 @{
     ViewData["Title"] = "Зони за сигурност";
 }
 
+@* ===== ЗАГЛАВНА ЛЕНТА ===== *@
 <div class="cp-page-header">
     <div>
         <div class="cp-page-title">Зони за сигурност</div>
         <div class="cp-page-subtitle">Управление на зоните и нивата на достъп</div>
     </div>
-    <a asp-action="Create" class="cp-btn cp-btn-primary">
-        <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H4a1 1 0 1 1 0-2h5V4a1 1 0 0 1 1-1z" clip-rule="evenodd"/></svg>
-        Добави зона
-    </a>
+
+    @* Бутонът "Добави" се показва само на Admin и Мениджър *@
+    @if (User.IsInRole("Admin") || User.IsInRole("Мениджър"))
+    {
+        <a asp-action="Create" class="cp-btn cp-btn-primary">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H4a1 1 0 1 1 0-2h5V4a1 1 0 0 1 1-1z" clip-rule="evenodd" />
+            </svg>
+            Добави зона
+        </a>
+    }
 </div>
 
+@* ===== ТАБЛИЦА СЪС ЗОНИ ===== *@
 <div class="cp-card">
     <div class="cp-card-body-flush">
+
+        @* Проверяваме дали има зони в базата данни *@
         @if (Model != null && Model.Any())
         {
             <table class="cp-table">
@@ -31,29 +43,54 @@
                     </tr>
                 </thead>
                 <tbody>
+
+                    @* Обхождаме всяка зона и я показваме като ред в таблицата *@
                     @foreach (var room in Model)
                     {
                         <tr>
+
+                            @* Името на зоната *@
                             <td>
-                                <div style="font-weight:600;color:var(--text-primary)">@room.RoomName</div>
+                                <div style="font-weight:600; color:var(--text-primary)">@room.RoomName</div>
                             </td>
+
+                            @* Уникалният код на зоната *@
                             <td>
-                                <span class="td-mono" style="font-family:monospace;font-size:12px;background:#f3f4f6;padding:2px 7px;border-radius:4px;color:var(--text-secondary)">@room.RoomCode</span>
+                                <span style="font-family:monospace; font-size:12px; background:#f3f4f6; padding:2px 7px; border-radius:4px; color:var(--text-secondary)">
+                                    @room.RoomCode
+                                </span>
                             </td>
-                            <td class="td-muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-secondary);font-size:12px">
+
+                            @* Описание — ако няма, показваме тире *@
+                            <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-secondary); font-size:12px">
                                 @(string.IsNullOrEmpty(room.Description) ? "—" : room.Description)
                             </td>
+
+                            @* Нивото на достъп с цветен badge *@
                             <td>
                                 <span class="cp-level cp-level-@room.AccessLevel">
                                     @switch (room.AccessLevel)
                                     {
-                                        case 1: <text>Ниво 1 — Всички</text> break;
-                                        case 2: <text>Ниво 2 — Служители</text> break;
-                                        case 3: <text>Ниво 3 — Мениджъри</text> break;
-                                        case 4: <text>Ниво 4 — Администратор</text> break;
+                                        case 1:
+                                            <text>Ниво 1 — Всички</text>
+                                            break;
+                                        case 2:
+
+                                            <text>Ниво 2 — Служители</text>
+                                            break;
+                                        case 3:
+
+                                            <text>Ниво 3 — Мениджъри</text>
+                                            break;
+                                        case 4:
+
+                                            <text>Ниво 4 — Администратор</text>
+                                            break;
                                     }
                                 </span>
                             </td>
+
+                            @* Дали зоната е активна или не *@
                             <td>
                                 @if (room.IsActive)
                                 {
@@ -64,33 +101,55 @@
                                     <span class="cp-badge cp-badge-gray"><span class="dot"></span> Неактивна</span>
                                 }
                             </td>
+
+                            @* Бутони за действия — детайли, редактиране, изтриване *@
                             <td style="text-align:right; padding-right:16px;">
-                                <div style="display:flex;gap:6px;justify-content:flex-end">
+                                <div style="display:flex; gap:6px; justify-content:flex-end">
+
+                                    @* Детайли — всеки може да вижда *@
                                     <a asp-action="Details" asp-route-id="@room.Id" class="cp-btn-icon" title="Детайли">
-                                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" clip-rule="evenodd"/></svg>
+                                        <svg fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" clip-rule="evenodd" />
+                                        </svg>
                                     </a>
-                                    <a asp-action="Edit" asp-route-id="@room.Id" class="cp-btn-icon" title="Редактирай">
-                                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@room.Id" class="cp-btn-icon danger" title="Изтрий">
-                                        <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2H9zM7 8a1 1 0 0 1 2 0v6a1 1 0 1 1-2 0V8zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 1 2 0V8a1 1 0 0 0-1-1z" clip-rule="evenodd"/></svg>
-                                    </a>
+
+                                    @* Редактиране и изтриване — само Admin и Мениджър *@
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Мениджър"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@room.Id" class="cp-btn-icon" title="Редактирай">
+                                            <svg fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                            </svg>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@room.Id" class="cp-btn-icon danger" title="Изтрий">
+                                            <svg fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2H9zM7 8a1 1 0 0 1 2 0v6a1 1 0 1 1-2 0V8zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 1 2 0V8a1 1 0 0 0-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    }
+
                                 </div>
                             </td>
                         </tr>
                     }
+
                 </tbody>
             </table>
         }
         else
         {
+            @* Ако няма зони — показваме съобщение *@
             <div class="cp-empty">
                 <div class="cp-empty-icon">
-                    <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z"/></svg>
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z" />
+                    </svg>
                 </div>
                 <div class="cp-empty-title">Все още няма зони</div>
                 <div class="cp-empty-sub">Добавете първата зона, за да започнете.</div>
             </div>
         }
+
     </div>
 </div>

@@ -1,43 +1,46 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Лог за достъп - записваме всяко влизане и излизане
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControlPanel.Models
 {
-    // Записи за достъп - кой влезе в коя стая и кога
     public class AccessLog
     {
-        // Уникален идентификатор
+        // Уникален номер на записа
         [Key]
         public int Id { get; set; }
 
-        // Кой потребител? (Външен ключ)
+        // ID на потребителя
         [Required]
         public string UserId { get; set; }
 
-        // Навигационно свойство към потребителя
+        // Самият потребител (зарежда се от базата)
         [ForeignKey("UserId")]
         public ApplicationUser? User { get; set; }
 
-        // Коя стая? (Външен ключ)
+        // ID на стаята
         [Required]
         public int RoomId { get; set; }
 
-        // Навигационно свойство към стаята
+        // Самата стая (зарежда се от базата)
         [ForeignKey("RoomId")]
         public Room? Room { get; set; }
 
-        // Време на влизане
+        // Времето на влизане
         public DateTime EntryTime { get; set; } = DateTime.Now;
 
-        // Време на излизане (null ако все още е вътре)
+        // Времето на излизане - празно означава "все още вътре"
         public DateTime? ExitTime { get; set; }
 
-        // Статус (Одобрен, Отказан, В изчакване)
+        // Резултатът от опита за влизане:
+        // "Approved" = влязъл успешно
+        // "Denied"   = отказан
+        // "Pending"  = чака одобрение
         [Required]
         [StringLength(20)]
-        public string Status { get; set; } // "Approved", "Denied", "Pending"
+        public string Status { get; set; }
 
-        // Бележки
+        // Допълнителни бележки (не е задължително)
         [StringLength(500)]
         public string? Notes { get; set; }
     }

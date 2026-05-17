@@ -1,51 +1,54 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Заявка за достъп - когато потребител иска да влезе в дадена стая
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControlPanel.Models
 {
-    // Заявки на потребители за достъп до стаи
     public class AccessRequest
     {
-        // Уникален идентификатор
+        // Уникален номер на заявката
         [Key]
         public int Id { get; set; }
 
-        // Кой потребител прави заявката? (Външен ключ)
+        // ID на потребителя, който прави заявката
         [Required]
         public string UserId { get; set; }
 
-        // Навигационно свойство към потребителя
+        // Самият потребител (зарежда се автоматично от базата)
         [ForeignKey("UserId")]
         public ApplicationUser? User { get; set; }
 
-        // За коя стая е заявката? (Външен ключ)
+        // ID на стаята, за която е заявката
         [Required]
         public int RoomId { get; set; }
 
-        // Навигационно свойство към стаята
+        // Самата стая (зарежда се автоматично от базата)
         [ForeignKey("RoomId")]
         public Room? Room { get; set; }
 
-        // Причина за заявката
+        // Причината защо потребителят иска достъп - задължително
         [Required(ErrorMessage = "Причината е задължителна")]
         [StringLength(500)]
         public string Reason { get; set; }
 
-        // Дата на заявката
+        // Датата на заявката - задава се автоматично
         public DateTime RequestDate { get; set; } = DateTime.Now;
 
-        // Статус (В изчакване, Одобрена, Отказана)
+        // Статусът на заявката:
+        // "Pending"  = чака одобрение
+        // "Approved" = одобрена
+        // "Denied"   = отказана
         [StringLength(20)]
         public string Status { get; set; } = "Pending";
 
-        // Отговор от администратора
+        // Отговорът на администратора (например "Одобрено" или "Отказано")
         [StringLength(500)]
         public string AdminResponse { get; set; }
 
-        // Кой администратор одобри/отказа
+        // ID на администратора, който е одобрил/отказал
         public string ApprovedByAdminId { get; set; }
 
-        // Дата на одобрение/отказ
+        // Датата на одобрение/отказ (може да е празна)
         public DateTime? ApprovalDate { get; set; }
     }
 }

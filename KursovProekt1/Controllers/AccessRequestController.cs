@@ -1,3 +1,4 @@
+// Контролер за заявките - изпращане, одобряване, отказване
 using ControlPanel.Data;
 using ControlPanel.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -7,118 +8,202 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlPanel.Controllers
 {
+    // Authorize = трябва да си влязъл в системата
     [Authorize]
     public class AccessRequestController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _базаДанни;
+        private readonly UserManager<ApplicationUser> _потребителМениджър;
 
+        // Конструктор - получаваме базата и потребителския мениджър
         public AccessRequestController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
-            _userManager = userManager;
+            _базаДанни = context;
+            _потребителМениджър = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        // ── Списък със заявките ───────────────────────────────────────────────
+        public async Task<IActionResult> Index(string search)
         {
-            var userId = _userManager.GetUserId(User);
-            List<AccessRequest> requests;
+            // Намираме ID-то на текущия потребител
+            var моетоID = _потребителМениджър.GetUserId(User);
 
-            // Admin ve Мениджър ve Служител виждат всичко
-            if (User.IsInRole("Admin") || User.IsInRole("Мениджър") || User.IsInRole("Служител"))
+            List<AccessRequest> заявки;
+
+            // Admin, Мениджър и Служител виждат ВСИЧКИ заявки
+            bool виждаВсички = User.IsInRole("Admin") ||
+                               User.IsInRole("Мениджър") ||
+                               User.IsInRole("Служител");
+
+            if (виждаВсички)
             {
-                requests = await _context.AccessRequests
-                    .Include(r => r.User).Include(r => r.Room)
-                    .OrderByDescending(r => r.RequestDate).ToListAsync();
+                var заявкиЗаявка = _базаДанни.AccessRequests
+                    .Include(з => з.User)
+                    .Include(з => з.Room)
+                    .AsQueryable();
+
+                // Търсене по имейл ако е въведено
+                bool имаТърсене = !string.IsNullOrEmpty(search);
+                if (имаТърсене)
+                    заявкиЗаявка = заявкиЗаявка.Where(з =>
+                        з.User != null &&
+                        з.User.Email != null &&
+                        з.User.Email.Contains(search));
+
+                заявки = await заявкиЗаявка
+                    .OrderByDescending(з => з.RequestDate)
+                    .ToListAsync();
             }
             else
             {
-                requests = await _context.AccessRequests
-                    .Include(r => r.User).Include(r => r.Room)
-                    .Where(r => r.UserId == userId)
-                    .OrderByDescending(r => r.RequestDate).ToListAsync();
+                // Обикновеният потребител вижда само СВОИТЕ заявки
+                заявки = await _базаДанни.AccessRequests
+                    .Include(з => з.User)
+                    .Include(з => з.Room)
+                    .Where(з => з.UserId == моетоID)
+                    .OrderByDescending(з => з.RequestDate)
+                    .ToListAsync();
             }
-            return View(requests);
+
+            ViewBag.SearchQuery = search;
+            return View(заявки);
         }
 
+        // ── Форма за нова заявка (GET) ────────────────────────────────────────
         public IActionResult Create()
         {
-            ViewBag.Rooms = _context.Rooms.Where(r => r.IsActive).ToList();
+            // Пращаме списък с активните стаи за падащото меню
+            ViewBag.Rooms = _базаДанни.Rooms.Where(с => с.IsActive).ToList();
             return View();
         }
 
+        // ── Изпращане на нова заявка (POST) ───────────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int roomId, string reason)
         {
-            var userId = _userManager.GetUserId(User);
+            var моетоID = _потребителМениджър.GetUserId(User);
 
-            bool kontrol = await _context.AccessRequests.AnyAsync(r =>
-                r.UserId == userId && r.RoomId == roomId &&
-                (r.Status == "Pending" || r.Status == "Approved"));
+            // Проверяваме нивото на достъп на стаята
+            var стая = await _базаДанни.Rooms.FindAsync(roomId);
+            if (стая != null)
+            {
+                // Има ли потребителят нужната роля за тази стая?
+                bool имаПравo =
+                    стая.AccessLevel == 1 ||
+                    (стая.AccessLevel == 2 && (User.IsInRole("Служител") || User.IsInRole("Мениджър") || User.IsInRole("Admin"))) ||
+                    (стая.AccessLevel == 3 && (User.IsInRole("Мениджър") || User.IsInRole("Admin"))) ||
+                    (стая.AccessLevel == 4 && User.IsInRole("Admin"));
 
-            if (kontrol)
+                if (!имаПравo)
+                {
+                    TempData["Error"] = "Нямате необходимото ниво на достъп за тази зона!";
+                    return RedirectToAction("Index");
+                }
+            }
+
+            // Проверяваме дали вече има чакаща или одобрена заявка за тази стая
+            bool вечеИмаЗаявка = await _базаДанни.AccessRequests.AnyAsync(з =>
+                з.UserId == моетоID &&
+                з.RoomId == roomId &&
+                (з.Status == "Pending" || з.Status == "Approved"));
+
+            if (вечеИмаЗаявка)
             {
                 TempData["Error"] = "Вече имате чакаща или одобрена заявка за тази зона!";
                 return RedirectToAction("Index");
             }
 
-            var novaZayavka = new AccessRequest
+            // Създаваме новата заявка
+            var новаЗаявка = new AccessRequest
             {
-                UserId = userId, RoomId = roomId, Reason = reason,
-                RequestDate = DateTime.Now, Status = "Pending",
-                AdminResponse = "", ApprovedByAdminId = ""
+                UserId = моетоID,
+                RoomId = roomId,
+                Reason = reason,
+                RequestDate = DateTime.Now,
+                Status = "Pending",
+                AdminResponse = "",
+                ApprovedByAdminId = ""
             };
 
-            _context.AccessRequests.Add(novaZayavka);
-            await _context.SaveChangesAsync();
+            _базаДанни.AccessRequests.Add(новаЗаявка);
+            await _базаДанни.SaveChangesAsync();
 
-            // Pending log създай
-            var log = new AccessLog { UserId = userId, RoomId = roomId, EntryTime = DateTime.Now, Status = "Pending" };
-            _context.AccessLogs.Add(log);
-            await _context.SaveChangesAsync();
+            // Създаваме и лог запис за тази заявка
+            var лог = new AccessLog
+            {
+                UserId = моетоID,
+                RoomId = roomId,
+                EntryTime = DateTime.Now,
+                Status = "Pending"
+            };
+
+            _базаДанни.AccessLogs.Add(лог);
+            await _базаДанни.SaveChangesAsync();
 
             TempData["Success"] = "Заявката е изпратена!";
             return RedirectToAction("Index");
         }
 
-        // Служител, Мениджър и Admin може да одобрят
+        // ── Одобряване на заявка (POST) ───────────────────────────────────────
         [HttpPost]
         [Authorize(Roles = "Admin,Мениджър,Служител")]
         public async Task<IActionResult> Approve(int id)
         {
-            var request = await _context.AccessRequests.FindAsync(id);
-            if (request == null) return NotFound();
+            // Намираме заявката по ID
+            var заявка = await _базаДанни.AccessRequests.FindAsync(id);
+            if (заявка == null)
+                return NotFound();
 
-            request.Status = "Approved";
-            request.AdminResponse = "Одобрено";
-            request.ApprovedByAdminId = _userManager.GetUserId(User);
-            request.ApprovalDate = DateTime.Now;
+            // Одобряваме я
+            заявка.Status = "Approved";
+            заявка.AdminResponse = "Одобрено";
+            заявка.ApprovedByAdminId = _потребителМениджър.GetUserId(User);
+            заявка.ApprovalDate = DateTime.Now;
 
-            var log = new AccessLog { UserId = request.UserId, RoomId = request.RoomId, EntryTime = DateTime.Now, Status = "Approved" };
-            _context.AccessLogs.Add(log);
+            // Създаваме лог запис за одобрението
+            var лог = new AccessLog
+            {
+                UserId = заявка.UserId,
+                RoomId = заявка.RoomId,
+                EntryTime = DateTime.Now,
+                Status = "Approved"
+            };
 
-            await _context.SaveChangesAsync();
+            _базаДанни.AccessLogs.Add(лог);
+            await _базаДанни.SaveChangesAsync();
+
             TempData["Success"] = "Заявката е одобрена!";
             return RedirectToAction("Index");
         }
 
+        // ── Отказване на заявка (POST) ────────────────────────────────────────
         [HttpPost]
         [Authorize(Roles = "Admin,Мениджър,Служител")]
         public async Task<IActionResult> Deny(int id)
         {
-            var request = await _context.AccessRequests.FindAsync(id);
-            if (request == null) return NotFound();
+            var заявка = await _базаДанни.AccessRequests.FindAsync(id);
+            if (заявка == null)
+                return NotFound();
 
-            request.Status = "Denied";
-            request.AdminResponse = "Отказано";
-            request.ApprovedByAdminId = _userManager.GetUserId(User);
-            request.ApprovalDate = DateTime.Now;
+            // Отказваме я
+            заявка.Status = "Denied";
+            заявка.AdminResponse = "Отказано";
+            заявка.ApprovedByAdminId = _потребителМениджър.GetUserId(User);
+            заявка.ApprovalDate = DateTime.Now;
 
-            var log = new AccessLog { UserId = request.UserId, RoomId = request.RoomId, EntryTime = DateTime.Now, Status = "Denied" };
-            _context.AccessLogs.Add(log);
+            // Създаваме лог запис за отказа
+            var лог = new AccessLog
+            {
+                UserId = заявка.UserId,
+                RoomId = заявка.RoomId,
+                EntryTime = DateTime.Now,
+                Status = "Denied"
+            };
 
-            await _context.SaveChangesAsync();
+            _базаДанни.AccessLogs.Add(лог);
+            await _базаДанни.SaveChangesAsync();
+
             TempData["Error"] = "Заявката е отказана.";
             return RedirectToAction("Index");
         }

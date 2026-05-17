@@ -19,7 +19,29 @@
         Нова заявка
     </a>
 </div>
-
+@if (User.IsInRole("Admin") || User.IsInRole("Мениджър") || User.IsInRole("Служител"))
+{
+    <div class="cp-filter-bar">
+        <form method="get" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <input type="text"
+                   name="search"
+                   value="@ViewBag.SearchQuery"
+                   placeholder="Търси по имейл на потребител..."
+                   class="cp-form-control"
+                   style="width:260px;height:36px;padding:0 10px;font-size:13px" />
+            <button type="submit" class="cp-btn cp-btn-ghost" style="height:36px;padding:0 14px;font-size:13px">
+                Търси
+            </button>
+            @if (!string.IsNullOrEmpty(ViewBag.SearchQuery as string))
+            {
+                <a href="/AccessRequest/Index" class="cp-btn cp-btn-ghost" style="height:36px;padding:0 14px;font-size:13px;color:#ef4444">
+                    × Изчисти
+                </a>
+            }
+            <span style="font-size:12px;color:var(--muted);margin-left:auto">@Model.Count() заявки</span>
+        </form>
+    </div>
+}
 <div class="cp-card">
     <div class="cp-card-body-flush">
         @if (!Model.Any())

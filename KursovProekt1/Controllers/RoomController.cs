@@ -1,111 +1,160 @@
+// Контролер за стаите - добавяне, редактиране, изтриване, преглед
 using ControlPanel.Data;
 using ControlPanel.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ControlPanel.Controllers
 {
     public class RoomController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        // Връзката с базата данни
+        private readonly ApplicationDbContext _базаДанни;
 
+        // Конструктор - базата данни се подава автоматично
         public RoomController(ApplicationDbContext context)
         {
-            _context = context;
+            _базаДанни = context;
         }
 
-        // Всички могат да виждат
+        // ── Списък с всички стаи ─────────────────────────────────────────────
+        // AllowAnonymous = всички могат да виждат, дори без вход
         [AllowAnonymous]
         public IActionResult Index()
         {
-            return View(_context.Rooms.ToList());
+            // Вземаме всички стаи от базата и ги пращаме към View-то
+            var стаи = _базаДанни.Rooms.ToList();
+            return View(стаи);
         }
 
-        // Всички могат да виждат
+        // ── Детайли за стая ───────────────────────────────────────────────────
         [AllowAnonymous]
         public IActionResult Details(int id)
         {
-            var room = _context.Rooms.Find(id);
-            if (room == null) return NotFound();
+            // Намираме стаята по ID
+            var стая = _базаДанни.Rooms.Find(id);
 
-            var usersWithAccess = _context.AccessRequests
-                .Include(r => r.User)
-                .Where(r => r.RoomId == id && r.Status == "Approved")
+            // Ако стаята не съществува - връщаме грешка 404
+            if (стая == null)
+                return NotFound();
+
+            // Намираме потребителите с одобрен достъп до тази стая
+            var потребителиСДостъп = _базаДанни.AccessRequests
+                .Include(з => з.User)
+                .Where(з => з.RoomId == id && з.Status == "Approved")
                 .ToList();
 
-            ViewBag.UsersWithAccess = usersWithAccess;
-            return View(room);
+            ViewBag.UsersWithAccess = потребителиСДостъп;
+
+            // Намираме кои потребители са вътре в момента
+            // Логика: имат одобрена заявка + влезли са + не са излезли (ExitTime == null)
+            var одобрениПотребителиID = _базаДанни.AccessRequests
+                .Where(з => з.RoomId == id && з.Status == "Approved")
+                .Select(з => з.UserId)
+                .ToList();
+
+            var вМомента = _базаДанни.AccessLogs
+                .Include(л => л.User)
+                .Where(л =>
+                    л.RoomId == id &&
+                    л.Status == "Approved" &&
+                    л.ExitTime == null &&
+                    одобрениПотребителиID.Contains(л.UserId))
+                .GroupBy(л => л.UserId)
+                .Select(г => г.OrderByDescending(л => л.EntryTime).First())
+                .ToList();
+
+            ViewBag.CurrentlyInside = вМомента;
+
+            return View(стая);
         }
 
-        // Admin ve Мениджър могат да добавят
+        // ── Форма за добавяне на стая (GET) ───────────────────────────────────
+        // Само Admin и Мениджър могат да добавят стаи
         [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Create()
         {
             return View();
         }
 
+        // ── Запазване на новата стая (POST) ───────────────────────────────────
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] // Защита срещу фалшиви заявки
         [Authorize(Roles = "Admin,Мениджър")]
-        public IActionResult Create(Room room)
+        public IActionResult Create(Room стая)
         {
+            // Проверяваме дали формата е попълнена правилно
             if (ModelState.IsValid)
             {
-                _context.Rooms.Add(room);
-                _context.SaveChanges();
+                _базаДанни.Rooms.Add(стая);
+                _базаДанни.SaveChanges();
                 TempData["Success"] = "Зоната е добавена успешно!";
                 return RedirectToAction("Index");
             }
-            return View(room);
+
+            // Ако има грешки - показваме формата отново
+            return View(стая);
         }
 
+        // ── Форма за редактиране на стая (GET) ────────────────────────────────
         [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Edit(int id)
         {
-            var room = _context.Rooms.Find(id);
-            if (room == null) return NotFound();
-            return View(room);
+            var стая = _базаДанни.Rooms.Find(id);
+            if (стая == null)
+                return NotFound();
+
+            return View(стая);
         }
 
+        // ── Запазване на редактираната стая (POST) ────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Мениджър")]
-        public IActionResult Edit(int id, Room room)
+        public IActionResult Edit(int id, Room стая)
         {
-            if (id != room.Id) return NotFound();
+            // Проверяваме дали ID-то съвпада
+            if (id != стая.Id)
+                return NotFound();
 
             if (ModelState.IsValid)
             {
-                _context.Update(room);
-                _context.SaveChanges();
+                _базаДанни.Update(стая);
+                _базаДанни.SaveChanges();
                 TempData["Success"] = "Зоната е обновена успешно!";
                 return RedirectToAction("Index");
             }
-            return View(room);
+
+            return View(стая);
         }
 
-        // Само Admin може да изтрива
+        // ── Страница за потвърждение на изтриване (GET) ───────────────────────
         [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult Delete(int id)
         {
-            var room = _context.Rooms.Find(id);
-            if (room == null) return NotFound();
-            return View(room);
+            var стая = _базаДанни.Rooms.Find(id);
+            if (стая == null)
+                return NotFound();
+
+            return View(стая);
         }
 
+        // ── Изтриване на стаята (POST) ────────────────────────────────────────
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Мениджър")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var room = _context.Rooms.Find(id);
-            if (room != null)
+            var стая = _базаДанни.Rooms.Find(id);
+
+            if (стая != null)
             {
-                _context.Rooms.Remove(room);
-                _context.SaveChanges();
+                _базаДанни.Rooms.Remove(стая);
+                _базаДанни.SaveChanges();
                 TempData["Success"] = "Зоната е изтрита успешно!";
             }
+
             return RedirectToAction("Index");
         }
     }

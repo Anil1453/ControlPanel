@@ -10,27 +10,28 @@
     <div class="cp-welcome-chip">@DateTime.Now.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("bg-BG"))</div>
 </div>
 
+@* Статистически карти - Admin вижда 4, останалите виждат 2 *@
 @if (User.IsInRole("Admin"))
 {
     <div class="cp-stats">
         <a href="/Room/Index" class="cp-stat-card">
-            <div class="cp-stat-top"><div class="cp-stat-icon blue"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z"/></svg></div><span class="cp-stat-arrow">→</span></div>
-            <div class="cp-stat-num">@ViewBag.TotalRooms</div>
+            <div class="cp-stat-top"><div class="cp-stat-icon blue"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z" /></svg></div><span class="cp-stat-arrow">→</span></div>
+            <div class="cp-stat-num">@ViewBag.БройСтаи</div>
             <div class="cp-stat-label">Зони за сигурност</div>
         </a>
         <a href="/User/Index" class="cp-stat-card">
-            <div class="cp-stat-top"><div class="cp-stat-icon green"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM17 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 0 0-1.5-4.33A5 5 0 0 1 19 16v1h-6.07zM6 11a5 5 0 0 1 5 5v1H1v-1a5 5 0 0 1 5-5z"/></svg></div><span class="cp-stat-arrow">→</span></div>
-            <div class="cp-stat-num">@ViewBag.TotalUsers</div>
+            <div class="cp-stat-top"><div class="cp-stat-icon green"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM17 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 0 0-1.5-4.33A5 5 0 0 1 19 16v1h-6.07zM6 11a5 5 0 0 1 5 5v1H1v-1a5 5 0 0 1 5-5z" /></svg></div><span class="cp-stat-arrow">→</span></div>
+            <div class="cp-stat-num">@ViewBag.БройПотребители</div>
             <div class="cp-stat-label">Регистрирани потребители</div>
         </a>
         <a href="/AccessLog/Index" class="cp-stat-card">
-            <div class="cp-stat-top"><div class="cp-stat-icon gray"><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd"/></svg></div><span class="cp-stat-arrow">→</span></div>
-            <div class="cp-stat-num">@ViewBag.TotalLogs</div>
+            <div class="cp-stat-top"><div class="cp-stat-icon gray"><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" clip-rule="evenodd" /></svg></div><span class="cp-stat-arrow">→</span></div>
+            <div class="cp-stat-num">@ViewBag.БройЛогове</div>
             <div class="cp-stat-label">Записа в логовете</div>
         </a>
         <a href="/AccessRequest/Index" class="cp-stat-card">
-            <div class="cp-stat-top"><div class="cp-stat-icon red"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0 0 16 4H4a2 2 0 0 0-1.997 1.884z"/><path d="m18 8.118-8 4-8-4V14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.118z"/></svg></div><span class="cp-stat-arrow">→</span></div>
-            <div class="cp-stat-num">@ViewBag.TotalRequests</div>
+            <div class="cp-stat-top"><div class="cp-stat-icon red"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0 0 16 4H4a2 2 0 0 0-1.997 1.884z" /><path d="m18 8.118-8 4-8-4V14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.118z" /></svg></div><span class="cp-stat-arrow">→</span></div>
+            <div class="cp-stat-num">@ViewBag.БройЗаявки</div>
             <div class="cp-stat-label">Заявки за достъп</div>
         </a>
     </div>
@@ -39,64 +40,138 @@ else
 {
     <div class="cp-stats" style="grid-template-columns:repeat(2,minmax(0,1fr));max-width:600px">
         <a href="/Room/Index" class="cp-stat-card">
-            <div class="cp-stat-top"><div class="cp-stat-icon blue"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z"/></svg></div><span class="cp-stat-arrow">→</span></div>
-            <div class="cp-stat-num">@ViewBag.TotalRooms</div>
+            <div class="cp-stat-top"><div class="cp-stat-icon blue"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z" /></svg></div><span class="cp-stat-arrow">→</span></div>
+            <div class="cp-stat-num">@ViewBag.БройСтаи</div>
             <div class="cp-stat-label">Зони за сигурност</div>
         </a>
         <a href="/AccessRequest/Index" class="cp-stat-card">
-            <div class="cp-stat-top"><div class="cp-stat-icon red"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0 0 16 4H4a2 2 0 0 0-1.997 1.884z"/><path d="m18 8.118-8 4-8-4V14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.118z"/></svg></div><span class="cp-stat-arrow">→</span></div>
-            <div class="cp-stat-num">@ViewBag.TotalRequests</div>
+            <div class="cp-stat-top"><div class="cp-stat-icon red"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0 0 16 4H4a2 2 0 0 0-1.997 1.884z" /><path d="m18 8.118-8 4-8-4V14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.118z" /></svg></div><span class="cp-stat-arrow">→</span></div>
+            <div class="cp-stat-num">@ViewBag.БройЗаявки</div>
             <div class="cp-stat-label">Моите заявки</div>
         </a>
     </div>
 }
 
 <div class="cp-grid-2">
+    @* Son loglar listesi *@
     <div class="cp-card">
         <div class="cp-card-header">
             <span class="cp-card-title">Последни логове</span>
-            @if (User.IsInRole("Admin")) { <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px;font-size:12px">Виж всички →</a> }
+            @if (User.IsInRole("Admin"))
+            {
+                <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px;font-size:12px">Виж всички →</a>
+            }
         </div>
         <div class="cp-card-body">
-            @if (ViewBag.RecentLogs != null)
+            @if (ViewBag.ПоследниЛогове != null)
             {
-                foreach (var log in ViewBag.RecentLogs)
+                foreach (var лог in ViewBag.ПоследниЛогове)
                 {
                     <div class="cp-mini-row">
-                        <div class="cp-mini-dot @(log.Status == "Approved" ? "green" : log.Status == "Denied" ? "red" : "amber")"></div>
-                        <div class="cp-mini-text">@(log.User?.Email ?? "—") → @(log.Room?.RoomName ?? "—")</div>
-                        <div class="cp-mini-time">@log.EntryTime.ToString("HH:mm")</div>
+                        <div class="cp-mini-dot @(лог.Status == "Approved" ? "green" : лог.Status == "Denied" ? "red" : "amber")"></div>
+                        <div class="cp-mini-text">@(лог.User?.Email ?? "—") → @(лог.Room?.RoomName ?? "—")</div>
+                        <div class="cp-mini-time">@лог.EntryTime.ToString("HH:mm")</div>
                     </div>
                 }
             }
-            else { <div class="cp-empty" style="padding:24px"><div class="cp-empty-sub">Все още няма логове.</div></div> }
+            else
+            {
+                <div class="cp-empty" style="padding:24px">
+                    <div class="cp-empty-sub">Все още няма логове.</div>
+                </div>
+            }
         </div>
     </div>
 
+    @* Son odalar listesi *@
     <div class="cp-card">
         <div class="cp-card-header">
             <span class="cp-card-title">Зони за сигурност</span>
-            @if (User.IsInRole("Admin")) { <a href="/Room/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px;font-size:12px">Управлявай →</a> }
+            @if (User.IsInRole("Admin"))
+            {
+                <a href="/Room/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px;font-size:12px">Управлявай →</a>
+            }
         </div>
         <div class="cp-card-body">
-            @if (ViewBag.RecentRooms != null)
+            @if (ViewBag.ПоследниСтаи != null)
             {
-                foreach (var room in ViewBag.RecentRooms)
+                foreach (var стая in ViewBag.ПоследниСтаи)
                 {
                     <div class="cp-mini-row">
                         <div style="flex:1">
-                            <div style="font-size:14px;font-weight:500">@room.RoomName</div>
-                            <div style="font-size:12px;color:var(--hint)">@room.RoomCode</div>
+                            <div style="font-size:14px;font-weight:500">@стая.RoomName</div>
+                            <div style="font-size:12px;color:var(--hint)">@стая.RoomCode</div>
                         </div>
-                        <span class="cp-level cp-level-@room.AccessLevel">Ниво @room.AccessLevel</span>
+                        <span class="cp-level cp-level-@стая.AccessLevel">Ниво @стая.AccessLevel</span>
                     </div>
                 }
             }
-            else { <div class="cp-empty" style="padding:24px"><div class="cp-empty-sub">Все още няма зони.</div></div> }
+            else
+            {
+                <div class="cp-empty" style="padding:24px">
+                    <div class="cp-empty-sub">Все още няма зони.</div>
+                </div>
+            }
         </div>
     </div>
 </div>
 
-@if (User.IsInRole("Admin") && (int)ViewBag.TotalLogs > 0)
+@* Заявки pasta grafiği - sadece Admin ve Мениджър, kayıt varsa *@
+@if ((User.IsInRole("Admin") || User.IsInRole("Мениджър")) && (int)ViewBag.БройЗаявки > 0)
 {
+    int одобрени = (int)ViewBag.ОдобрениЗаявки;
+    int отказани = (int)ViewBag.ОтказаниЗаявки;
+    int чакащи = (int)ViewBag.ЧакащиЗаявки;
+
+    <div class="cp-card" style="max-width:420px;margin-top:20px">
+        <div class="cp-card-header">
+            <span class="cp-card-title">Статистика на заявките</span>
+            <a href="/AccessRequest/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px;font-size:12px">Виж всички →</a>
+        </div>
+        <div class="cp-card-body" style="display:flex;align-items:center;gap:24px">
+            <div style="width:110px;height:110px;flex-shrink:0">
+                <canvas id="zaявkiChart"></canvas>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:10px;height:10px;border-radius:2px;background:#16a34a;flex-shrink:0"></div>
+                    <div style="font-size:13px;flex:1">Одобрени</div>
+                    <div style="font-weight:700;color:#16a34a;font-size:14px">@одобрени</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:10px;height:10px;border-radius:2px;background:#dc2626;flex-shrink:0"></div>
+                    <div style="font-size:13px;flex:1">Отказани</div>
+                    <div style="font-weight:700;color:#dc2626;font-size:14px">@отказани</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:10px;height:10px;border-radius:2px;background:#d97706;flex-shrink:0"></div>
+                    <div style="font-size:13px;flex:1">В изчакване</div>
+                    <div style="font-weight:700;color:#d97706;font-size:14px">@чакащи</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+        var ctx = document.getElementById('zaявkiChart');
+        ctx.width = 110; ctx.height = 110;
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [@одобрени, @отказани, @чакащи],
+                    backgroundColor: ['#16a34a', '#dc2626', '#d97706'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: { legend: { display: false } },
+                animation: { duration: 800 }
+            }
+        });
+    </script>
 }

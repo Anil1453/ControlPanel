@@ -1,36 +1,40 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Стаята (зона) - тук пазим информацията за всяка стая
+using System.ComponentModel.DataAnnotations;
 
 namespace ControlPanel.Models
 {
-    // Клас за стаи/помещения с контролиран достъп
     public class Room
     {
-        // Уникален идентификатор - автоматично нараства
+        // Уникален номер на стаята - базата данни го задава автоматично (1, 2, 3...)
         [Key]
         public int Id { get; set; }
 
-        // Име на стаята (напр. "Сървърна зала")
+        // Името на стаята - задължително поле
         [Required(ErrorMessage = "Името на стаята е задължително")]
         [StringLength(100)]
         public string RoomName { get; set; }
 
-        // Код на стаята (напр. "A101")
+        // Кодът на стаята (например "A101") - задължително поле
         [Required(ErrorMessage = "Кодът на стаята е задължителен")]
         [StringLength(20)]
         public string RoomCode { get; set; }
 
-        // Описание
+        // Описание на стаята - не е задължително
         [StringLength(500)]
         public string Description { get; set; }
 
-        // Ниво на достъп (1=Всички, 2=Служители, 3=Мениджъри, 4=Администратор)
+        // Ниво на достъп - число от 1 до 4
+        // 1 = Всички могат да влязат
+        // 2 = Само служители и по-горе
+        // 3 = Само мениджъри и по-горе
+        // 4 = Само администратор
         [Range(1, 4)]
         public int AccessLevel { get; set; }
 
-        // Активна ли е стаята?
+        // Активна ли е стаята? true = да, false = не
         public bool IsActive { get; set; } = true;
 
-        // Колекция от записи за достъп до тази стая
+        // Списък с логове за тази стая (кой е влизал)
         public ICollection<AccessLog>? AccessLogs { get; set; }
     }
 }

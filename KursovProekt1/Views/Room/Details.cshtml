@@ -10,10 +10,14 @@
         <div class="cp-page-subtitle">Детайли и потребители с достъп</div>
     </div>
     <div style="display:flex;gap:8px">
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="cp-btn cp-btn-ghost">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
-            Редактирай
-        </a>
+        @* Редактирай — sadece Admin ve Мениджър *@
+        @if (User.IsInRole("Admin") || User.IsInRole("Мениджър"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="cp-btn cp-btn-ghost">
+                <svg fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 1 1 2.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>
+                Редактирай
+            </a>
+        }
         <a asp-action="Index" class="cp-btn cp-btn-ghost">← Назад</a>
     </div>
 </div>
@@ -106,3 +110,69 @@
         </div>
     </div>
 </div>
+@* YENİ: Şu an odada olanlar — canlı liste *@
+@{
+    var insideUsers = ViewBag.CurrentlyInside as IEnumerable<dynamic>;
+    int insideCount = insideUsers?.Count() ?? 0;
+}
+
+<div class="cp-card" style="margin-top:20px">
+    <div class="cp-card-header">
+        <span class="cp-card-title">
+            <span style="display:inline-block;width:8px;height:8px;background:#16a34a;border-radius:50%;margin-right:6px;animation:pulse 2s infinite"></span>
+            В момента в зоната
+        </span>
+        <span style="font-size:12px;color:var(--muted)">@insideCount потребителя вътре</span>
+    </div>
+    <div class="cp-card-body-flush">
+        @if (insideUsers != null && insideUsers.Any())
+        {
+            <table class="cp-table">
+                <thead>
+                    <tr>
+                        <th>Потребител</th>
+                        <th>Влязъл в</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in insideUsers)
+                    {
+                        <tr>
+                            <td>
+                                <div style="display:flex;align-items:center;gap:8px">
+                                    <div class="cp-avatar blue">@((log.User?.Email ?? "??").Substring(0, 2).ToUpper())</div>
+                                    <span style="font-size:13px;font-weight:500">@(log.User?.Email ?? "—")</span>
+                                </div>
+                            </td>
+                            <td style="font-size:12px;color:var(--muted)">@log.EntryTime.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>
+                                <span class="cp-badge cp-badge-blue">
+                                    <span class="dot"></span> Вътре в момента
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="cp-empty" style="padding:20px">
+                <div class="cp-empty-sub">В момента няма потребители в тази зона.</div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.3;
+        }
+    }
+</style>

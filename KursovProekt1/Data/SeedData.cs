@@ -1,42 +1,42 @@
-﻿using ControlPanel.Models;
+﻿// Начални данни - изпълнява се веднъж при стартиране на приложението
+// Създава ролите и администраторския акаунт ако не съществуват
+using ControlPanel.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace ControlPanel.Data
 {
     public static class SeedData
     {
-        // Този метод се включва когато се стартира приложението
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            // (roli suzdava)
+            // Вземаме услугите за роли и потребители
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            // (potrebiteli suzdava)
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            // 2 rola: Admin i User
-            string[] roleNames = { "Admin", "Мениджър", "Служител", "Потребител" };
+            // Списък с всички роли в системата
+            string[] роли = { "Admin", "Мениджър", "Служител", "Потребител" };
 
-            // Za vsqka rolq:
-            foreach (var roleName in roleNames)
+            // Създаваме всяка роля ако не съществува
+            foreach (var роля in роли)
             {
-                // Ako ne sastostva
-                if (!await roleManager.RoleExistsAsync(roleName))
+                bool ролятаСъществува = await roleManager.RoleExistsAsync(роля);
+
+                if (!ролятаСъществува)
                 {
-                    // Suzdai q
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                    await roleManager.CreateAsync(new IdentityRole(роля));
                 }
             }
 
-            // Admin email i parola
+            // Проверяваме дали администраторът вече съществува
             string adminEmail = "admin@admin.com";
-            string adminPassword = "Admin123!";
+            string adminПарола = "Admin123!";
 
-            // Ako admin ne sastostva
-            if (await userManager.FindByEmailAsync(adminEmail) == null)
+            bool adminСъществува = await userManager.FindByEmailAsync(adminEmail) != null;
+
+            if (!adminСъществува)
             {
-                // Suzdai nov admin potrebitel
-                var adminUser = new ApplicationUser
+                // Създаваме администраторския акаунт
+                var adminПотребител = new ApplicationUser
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
@@ -47,23 +47,26 @@ namespace ControlPanel.Data
                     RegistrationDate = DateTime.Now
                 };
 
-                // Zapazi go v bazata
-                var result = await userManager.CreateAsync(adminUser, adminPassword);
+                // Запазваме го в базата с паролата
+                var резултат = await userManager.CreateAsync(adminПотребител, adminПарола);
 
-                // Ako uspexa
-                if (result.Succeeded)
+                // Ако е създаден успешно, даваме му Admin роля
+                if (резултат.Succeeded)
                 {
-                    // Dobavi Admin rolqta
-                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                    await userManager.AddToRoleAsync(adminПотребител, "Admin");
                 }
             }
-            // Всички потребители без роля да получат роля Потребител
-            foreach (var user in userManager.Users.ToList())
+
+            // Всеки потребител без роля получава роля "Потребител"
+            foreach (var потребител in userManager.Users.ToList())
             {
-                var roles = await userManager.GetRolesAsync(user);
-                if (roles.Count == 0)
+                var ролиНаПотребителя = await userManager.GetRolesAsync(потребител);
+
+                bool няmaРоля = ролиНаПотребителя.Count == 0;
+
+                if (няmaРоля)
                 {
-                    await userManager.AddToRoleAsync(user, "Потребител");
+                    await userManager.AddToRoleAsync(потребител, "Потребител");
                 }
             }
         }

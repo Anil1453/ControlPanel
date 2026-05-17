@@ -1,3 +1,4 @@
+// Начална страница - показва статистики и последни активности
 using ControlPanel.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,53 +7,73 @@ namespace ControlPanel.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        // Връзката с базата данни
+        private readonly ApplicationDbContext _базаДанни;
 
+        // Конструктор - базата данни се подава автоматично от системата
         public HomeController(ApplicationDbContext context)
         {
-            _context = context;
+            _базаДанни = context;
         }
 
+        // ── Начална страница ──────────────────────────────────────────────────
         public IActionResult Index()
         {
-            ViewBag.TotalRooms    = _context.Rooms.Count();
-            ViewBag.TotalUsers    = _context.Users.Count();
-            ViewBag.TotalLogs     = _context.AccessLogs.Count();
-            ViewBag.TotalRequests = _context.AccessRequests.Count();
+            // Броим записите в таблиците и ги пращаме към View-то
+            // ViewBag е като "торба" - слагаме данни, View-то ги взима
+            ViewBag.БройСтаи = _базаДанни.Rooms.Count();
+            ViewBag.БройПотребители = _базаДанни.Users.Count();
+            ViewBag.БройЛогове = _базаДанни.AccessLogs.Count();
+            ViewBag.БройЗаявки = _базаДанни.AccessRequests.Count();
 
-            // последни 5 лога
-            ViewBag.RecentLogs = _context.AccessLogs
-                .Include(a => a.User)
-                .Include(a => a.Room)
-                .OrderByDescending(a => a.EntryTime)
+            // Последните 5 лога за начална страница
+            // Include = зареди и свързаните данни (потребител и стая)
+            // OrderByDescending = от най-новото към най-старото
+            // Take(5) = вземи само 5
+            ViewBag.ПоследниЛогове = _базаДанни.AccessLogs
+                .Include(лог => лог.User)
+                .Include(лог => лог.Room)
+                .OrderByDescending(лог => лог.EntryTime)
                 .Take(5)
                 .ToList();
 
-            // последни 5 зони
-            ViewBag.RecentRooms = _context.Rooms
-                .Where(r => r.IsActive)
-                .OrderBy(r => r.RoomName)
+            // Последните 5 активни стаи за начална страница
+            ViewBag.ПоследниСтаи = _базаДанни.Rooms
+                .Where(стая => стая.IsActive)
+                .OrderBy(стая => стая.RoomName)
                 .Take(5)
                 .ToList();
 
-            // лог истатискити за паста диаграма
-            ViewBag.ApprovedLogs = _context.AccessLogs.Count(a => a.Status == "Approved");
-            ViewBag.DeniedLogs   = _context.AccessLogs.Count(a => a.Status == "Denied");
-            ViewBag.PendingLogs  = _context.AccessLogs.Count(a => a.Status == "Pending");
+            // Статистики за логовете (за диаграмата)
+            ViewBag.ОдобрениЛогове = _базаДанни.AccessLogs.Count(л => л.Status == "Approved");
+            ViewBag.ОтказаниЛогове = _базаДанни.AccessLogs.Count(л => л.Status == "Denied");
+            ViewBag.ЧакащиЛогове = _базаДанни.AccessLogs.Count(л => л.Status == "Pending");
+
+            // Статистики за заявките (за диаграмата на начална страница)
+            ViewBag.ОдобрениЗаявки = _базаДанни.AccessRequests.Count(з => з.Status == "Approved");
+            ViewBag.ОтказаниЗаявки = _базаДанни.AccessRequests.Count(з => з.Status == "Denied");
+            ViewBag.ЧакащиЗаявки = _базаДанни.AccessRequests.Count(з => з.Status == "Pending");
+
+            // Брой чакащи заявки за известието (червено розетче в менюто)
+            ViewBag.БройЧакащи = _базаДанни.AccessRequests.Count(з => з.Status == "Pending");
 
             return View();
         }
 
+        // ── Страница за поверителност ─────────────────────────────────────────
         public IActionResult Privacy()
         {
             return View();
         }
 
+        // ── Страница "Отказан достъп" ─────────────────────────────────────────
+        // Показва се когато потребител се опита да влезе в забранена страница
         public IActionResult AccessDenied()
         {
             return View("~/Views/Shared/AccessDenied.cshtml");
         }
 
+        // ── Страница с информация за ролите ──────────────────────────────────
         public IActionResult Roles()
         {
             return View();

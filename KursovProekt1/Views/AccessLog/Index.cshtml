@@ -76,39 +76,35 @@
 
 <div class="cp-filter-bar">
     <form method="get" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+
         <select name="status" onchange="this.form.submit()">
             <option value="">Всички статуси</option>
-            @if (ViewBag.SelectedStatus == "Approved")
-            {
-                <option value="Approved" selected="selected">Одобрен</option>
-                <option value="Denied">Отказан</option>
-                <option value="Pending">В изчакване</option>
-            }
-            else if (ViewBag.SelectedStatus == "Denied")
-            {
-                <option value="Approved">Одобрен</option>
-                <option value="Denied" selected="selected">Отказан</option>
-                <option value="Pending">В изчакване</option>
-            }
-            else if (ViewBag.SelectedStatus == "Pending")
-            {
-                <option value="Approved">Одобрен</option>
-                <option value="Denied">Отказан</option>
-                <option value="Pending" selected="selected">В изчакване</option>
-            }
-            else
-            {
-                <option value="Approved">Одобрен</option>
-                <option value="Denied">Отказан</option>
-                <option value="Pending">В изчакване</option>
-            }
+            <option value="Approved" selected="@(ViewBag.SelectedStatus == "Approved" ? "selected" : null)">Одобрени</option>
+            <option value="Denied" selected="@(ViewBag.SelectedStatus == "Denied" ? "selected" : null)">Отказани</option>
+            <option value="Pending" selected="@(ViewBag.SelectedStatus == "Pending" ? "selected" : null)">В изчакване</option>
         </select>
-        @if (!string.IsNullOrEmpty(ViewBag.SelectedStatus as string))
+
+        @* YENİ: Arama kutusu *@
+        <input type="text"
+               name="search"
+               value="@ViewBag.SearchQuery"
+               placeholder="Търси по имейл..."
+               class="cp-form-control"
+               style="width:220px;height:36px;padding:0 10px;font-size:13px" />
+
+        <button type="submit" class="cp-btn cp-btn-ghost" style="height:36px;padding:0 14px;font-size:13px">
+            Търси
+        </button>
+
+        @if (!string.IsNullOrEmpty(ViewBag.SelectedStatus as string) || !string.IsNullOrEmpty(ViewBag.SearchQuery as string))
         {
-            <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="height:34px;padding:0 10px;font-size:12px">Изчисти ×</a>
+            <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="height:36px;padding:0 14px;font-size:13px;color:#ef4444">
+                × Изчисти
+            </a>
         }
+
+        <span style="font-size:12px;color:var(--muted);margin-left:auto">@Model.Count() записа</span>
     </form>
-    <span style="font-size:12px;color:var(--muted);margin-left:auto">@Model.Count() записа</span>
 </div>
 
 <div class="cp-card">

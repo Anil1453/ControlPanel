@@ -1,34 +1,56 @@
+// Контролер за логовете - показва кой кога е влизал
 using ControlPanel.Data;
-using ControlPanel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlPanel.Controllers
 {
-    // Admin ve Мениджър могат да виждат логовете
+    // Само Admin и Мениджър могат да виждат логовете
     [Authorize(Roles = "Admin,Мениджър")]
     public class AccessLogController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        // Връзката с базата данни
+        private readonly ApplicationDbContext _базаДанни;
 
+        // Конструктор
         public AccessLogController(ApplicationDbContext context)
         {
-            _context = context;
+            _базаДанни = context;
         }
 
-        public IActionResult Index(string status)
+        // ── Списък с логове ───────────────────────────────────────────────────
+        // status = филтър по статус (Approved/Denied/Pending)
+        // search = търсене по имейл
+        public IActionResult Index(string status, string search)
         {
-            var logs = _context.AccessLogs
-                .Include(a => a.User)
-                .Include(a => a.Room)
+            // Вземаме всички логове
+            // AsQueryable = не изпълняваме заявката още, само я подготвяме
+            var логове = _базаДанни.AccessLogs
+                .Include(л => л.User)
+                .Include(л => л.Room)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(status))
-                logs = logs.Where(a => a.Status == status);
+            // Ако е избран статус - филтрираме по него
+            bool имаФилтърСтатус = !string.IsNullOrEmpty(status);
+            if (имаФилтърСтатус)
+                логове = логове.Where(л => л.Status == status);
 
+            // Ако има търсене - филтрираме по имейл
+            bool имаТърсене = !string.IsNullOrEmpty(search);
+            if (имаТърсене)
+                логове = логове.Where(л =>
+                    л.User != null &&
+                    л.User.Email != null &&
+                    л.User.Email.Contains(search));
+
+            // Пращаме избраните стойности обратно към View-то
+            // За да останат в полетата след търсене
             ViewBag.SelectedStatus = status;
-            return View(logs.OrderByDescending(a => a.EntryTime).ToList());
+            ViewBag.SearchQuery = search;
+
+            // Изпълняваме заявката и връщаме резултата
+            return View(логове.OrderByDescending(л => л.EntryTime).ToList());
         }
     }
 }
