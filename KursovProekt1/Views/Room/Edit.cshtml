@@ -1,20 +1,25 @@
+@* Моделът е зоната, която се редактира *@
 @model ControlPanel.Models.Room
 
 @{
     ViewData["Title"] = "Редактирай зона";
 }
 
+@* ===== ЗАГЛАВНА ЛЕНТА ===== *@
 <div class="cp-page-header">
     <div>
         <div class="cp-page-title">Редактирай зона</div>
         <div class="cp-page-subtitle">Промяна на данните за <strong>@Model.RoomName</strong></div>
     </div>
     <a asp-action="Index" class="cp-btn cp-btn-ghost">
-        <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 0 1-1.414 0l-6-6a1 1 0 0 1 0-1.414l6-6a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l4.293 4.293a1 1 0 0 1 0 1.414z" clip-rule="evenodd"/></svg>
+        <svg fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 0 1-1.414 0l-6-6a1 1 0 0 1 0-1.414l6-6a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l4.293 4.293a1 1 0 0 1 0 1.414z" clip-rule="evenodd" />
+        </svg>
         Назад
     </a>
 </div>
 
+@* ===== ФОРМА ЗА РЕДАКТИРАНЕ ===== *@
 <div class="cp-card" style="max-width:560px">
     <div class="cp-card-header">
         <span class="cp-card-title">Данни за зоната</span>
@@ -23,26 +28,32 @@
     <div class="cp-card-body">
         <form asp-action="Edit" method="post">
             @Html.AntiForgeryToken()
+
+            @* Скрито поле — пазим ID при POST *@
             <input asp-for="Id" type="hidden" />
 
+            @* Поле: Ime на зоната *@
             <div class="cp-form-group">
                 <label asp-for="RoomName" class="cp-form-label">Ime на зоната <span class="req">*</span></label>
                 <input asp-for="RoomName" class="cp-form-control" />
                 <span asp-validation-for="RoomName" class="cp-form-error"></span>
             </div>
 
+            @* Поле: Код на зоната *@
             <div class="cp-form-group">
                 <label asp-for="RoomCode" class="cp-form-label">Код на зоната <span class="req">*</span></label>
                 <input asp-for="RoomCode" class="cp-form-control" />
                 <span asp-validation-for="RoomCode" class="cp-form-error"></span>
             </div>
 
+            @* Поле: Описание *@
             <div class="cp-form-group">
                 <label asp-for="Description" class="cp-form-label">Описание</label>
                 <textarea asp-for="Description" class="cp-form-control" rows="3"></textarea>
                 <span asp-validation-for="Description" class="cp-form-error"></span>
             </div>
 
+            @* Поле: Ниво на достъп *@
             <div class="cp-form-group">
                 <label asp-for="AccessLevel" class="cp-form-label">Ниво на достъп</label>
                 <select asp-for="AccessLevel" class="cp-form-control">
@@ -53,6 +64,7 @@
                 </select>
             </div>
 
+            @* Поле: Активна/неактивна *@
             <div class="cp-form-group">
                 <div class="cp-checkbox-group">
                     <input asp-for="IsActive" type="checkbox" id="IsActive" />
@@ -60,17 +72,24 @@
                 </div>
             </div>
 
+            @* Бутони: Запази и Отказ *@
             <div class="cp-form-actions">
                 <button type="submit" class="cp-btn cp-btn-primary">
-                    <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z" clip-rule="evenodd"/></svg>
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z" clip-rule="evenodd" />
+                    </svg>
                     Запази промените
                 </button>
                 <a asp-action="Index" class="cp-btn cp-btn-ghost">Отказ</a>
             </div>
+
         </form>
     </div>
 </div>
 
+@* Validation scriptleri *@
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

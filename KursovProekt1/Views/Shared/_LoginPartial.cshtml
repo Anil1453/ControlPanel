@@ -1,23 +1,31 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@* Partial view за навигационната лента — вход/изход *@
+@using Microsoft.AspNetCore.Identity
 @using ControlPanel.Models
-
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
+    @* Ако потребителят е влязъл в системата *@
     @if (SignInManager.IsSignedIn(User))
     {
+        @* Показваме имейла/потребителското ime *@
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Здравей @User.Identity?.Name!</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                Здравей @User.Identity?.Name!
+            </a>
         </li>
+
+        @* Бутон за изход — изпраща POST заявка *@
         <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button type="submit" class="nav-link btn btn-link text-dark">Изход</button>
             </form>
         </li>
     }
     else
     {
+        @* Ако не е влязъл — показваме регистрация и вход *@
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
         </li>

@@ -1,53 +1,65 @@
+@* Моделът е зоната, която ще се изтрие *@
 @model ControlPanel.Models.Room
 
 @{
     ViewData["Title"] = "Изтрий зона";
 }
 
+@* ===== ЗАГЛАВНА ЛЕНТА ===== *@
 <div class="cp-page-header">
     <div>
         <div class="cp-page-title">Изтриване на зона</div>
         <div class="cp-page-subtitle">Това действие е необратимо</div>
     </div>
     <a asp-action="Index" class="cp-btn cp-btn-ghost">
-        <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 0 1-1.414 0l-6-6a1 1 0 0 1 0-1.414l6-6a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l4.293 4.293a1 1 0 0 1 0 1.414z" clip-rule="evenodd"/></svg>
+        <svg fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 0 1-1.414 0l-6-6a1 1 0 0 1 0-1.414l6-6a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l4.293 4.293a1 1 0 0 1 0 1.414z" clip-rule="evenodd" />
+        </svg>
         Назад
     </a>
 </div>
 
+@* ===== ПОТВЪРЖДЕНИЕ ЗА ИЗТРИВАНЕ ===== *@
 <div class="cp-card" style="max-width:500px">
-    <div class="cp-card-header" style="background:#fef2f2;border-bottom-color:#fecaca">
+    <div class="cp-card-header" style="background:#fef2f2; border-bottom-color:#fecaca">
         <span class="cp-card-title" style="color:#991b1b">Потвърдете изтриването</span>
     </div>
     <div class="cp-card-body">
-        <div style="background:var(--gray-light);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;justify-content:space-between;font-size:13px">
+
+        @* Обобщение на зоната, която ще се изтрие *@
+        <div style="background:var(--gray-light); border-radius:var(--radius-md); padding:14px 16px; margin-bottom:20px; display:flex; flex-direction:column; gap:8px">
+            <div style="display:flex; justify-content:space-between; font-size:13px">
                 <span style="color:var(--text-secondary)">Стая</span>
                 <span style="font-weight:600">@Model.RoomName</span>
             </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px">
+            <div style="display:flex; justify-content:space-between; font-size:13px">
                 <span style="color:var(--text-secondary)">Код</span>
                 <span style="font-family:monospace">@Model.RoomCode</span>
             </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px">
+            <div style="display:flex; justify-content:space-between; font-size:13px">
                 <span style="color:var(--text-secondary)">Ниво на достъп</span>
                 <span class="cp-level cp-level-@Model.AccessLevel">Ниво @Model.AccessLevel</span>
             </div>
         </div>
 
-        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">
+        @* Предупредително съобщение *@
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px">
             Сигурни ли сте, че искате да изтриете тази зона? Всички логове, свързани с нея, могат да бъдат засегнати.
         </p>
 
+        @* Форма за потвърждение *@
         <form asp-action="Delete" method="post">
             @Html.AntiForgeryToken()
-            <div style="display:flex;gap:8px">
+            <div style="display:flex; gap:8px">
                 <button type="submit" class="cp-btn cp-btn-danger">
-                    <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2H9zM7 8a1 1 0 0 1 2 0v6a1 1 0 1 1-2 0V8zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 1 2 0V8a1 1 0 0 0-1-1z" clip-rule="evenodd"/></svg>
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2H9zM7 8a1 1 0 0 1 2 0v6a1 1 0 1 1-2 0V8zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 1 2 0V8a1 1 0 0 0-1-1z" clip-rule="evenodd" />
+                    </svg>
                     Да, изтрий
                 </button>
                 <a asp-action="Index" class="cp-btn cp-btn-ghost">Отказ</a>
             </div>
         </form>
+
     </div>
 </div>
