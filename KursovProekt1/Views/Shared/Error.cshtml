@@ -12,26 +12,26 @@
     </div>
 </div>
 
-<div class="cp-card" style="max-width:600px">
+<div class="cp-card cp-card-md">
     <div class="cp-card-body">
 
         @* Показваме Request ID само ако е наличен — помага при дебъгване *@
         @if (Model.ShowRequestId)
         {
-            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px">
+            <p class="cp-error-desc">
                 <strong>Request ID:</strong> <code>@Model.RequestId</code>
             </p>
         }
 
         @* Съвет за разработчици — само в Development режим *@
-        <p style="font-size:13px; color:var(--muted); line-height:1.7">
+        <p class="cp-error-note">
             За повече информация за грешката, сменете средата на <strong>Development</strong>
             чрез промяна на <strong>ASPNETCORE_ENVIRONMENT</strong>.
             Не активирайте Development режима в продукция — може да изложи чувствителна информация.
         </p>
 
         @* Бутон за връщане *@
-        <div style="margin-top:20px">
+        <div class="cp-error-actions">
             <a href="/" class="cp-btn cp-btn-primary">← Към началната страница</a>
         </div>
 

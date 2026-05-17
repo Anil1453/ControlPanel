@@ -83,7 +83,7 @@
                     int pendingCount = _layoutDb.AccessRequests.Count(r => r.Status == "Pending");
                     if (pendingCount > 0)
                     {
-                        <span style="background:#ef4444; color:white; font-size:10px; font-weight:700; padding:1px 6px; border-radius:10px; margin-left:auto; min-width:18px; text-align:center; line-height:16px;">@pendingCount</span>
+                        <span class="cp-badge-count">@pendingCount</span>
                     }
                 }
             </a>
@@ -124,7 +124,7 @@
             @* Профил — само ако е влязъл *@
             @if (SignInManager.IsSignedIn(User))
             {
-                <div class="cp-nav-section-label" style="margin-top:12px">Акаунт</div>
+                <div class="cp-nav-section-label cp-nav-section-mt">Акаунт</div>
                 <a asp-controller="Profile" asp-action="Index"
                    class="cp-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "active" : "")">
                     <span class="cp-nav-icon">
@@ -149,7 +149,7 @@
                     @* Профилна снимка или инициали *@
                     @if (hasPhoto)
                     {
-                        <img src="/uploads/@currentUser.ProfilePicture" style="width:30px; height:30px; border-radius:50%; object-fit:cover; flex-shrink:0" />
+                        <img src="/uploads/@currentUser.ProfilePicture" class="cp-avatar-sm" />
                     }
                     else
                     {
@@ -184,7 +184,7 @@
 
                     @* Бутон към профила *@
                     <a href="/Profile" class="cp-logout-btn" title="Профил">
-                        <svg viewBox="0 0 20 20" fill="currentColor" style="width:16px; height:16px"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-7 9a7 7 0 1 1 14 0H3z" clip-rule="evenodd" /></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor" class="cp-icon-sm"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-7 9a7 7 0 1 1 14 0H3z" clip-rule="evenodd" /></svg>
                     </a>
 
                     @* Бутон за изход *@

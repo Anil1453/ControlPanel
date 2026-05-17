@@ -1,149 +1,111 @@
-﻿@* RFID Симулатор — тества достъпа без физически четец *@
 @{
     ViewData["Title"] = "RFID Симулатор";
 }
 
-@* ===== ЗАГЛАВНА ЛЕНТА ===== *@
 <div class="cp-page-header">
     <div>
         <div class="cp-page-title">RFID Симулатор</div>
-        <div class="cp-page-subtitle">Симулира четец на RFID карта за тестване на системата</div>
+        <div class="cp-page-subtitle">Тест на системата без реално устройство</div>
     </div>
-
-    @* Индикатор "Системата работи" *@
-    <span style="display:flex; align-items:center; gap:6px; font-size:12px; color:#16a34a; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 12px; border-radius:20px">
-        <span style="width:7px; height:7px; background:#16a34a; border-radius:50%; animation:pulse 2s infinite; display:inline-block"></span>
-        Системата работи
+    <span class="cp-rfid-online">
+        <span class="cp-rfid-dot"></span>
+        Системата е активна
     </span>
 </div>
 
-@* ===== ДВЕ КОЛОНИ: ФОРМА ЗА СИМУЛАЦИЯ + ОБЯСНЕНИЕ ===== *@
 <div class="cp-grid-2">
 
-    @* ---- ЛЯВА КАРТА: форма за симулация ---- *@
     <div class="cp-card">
         <div class="cp-card-header">
-            <span class="cp-card-title">Симулирай RFID четец</span>
+            <span class="cp-card-title">Симулирай четец</span>
         </div>
         <div class="cp-card-body">
-
-            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:20px">
-                Изберете потребител и зона. Системата ще провери дали потребителят има одобрен достъп и ще запише резултата в логовете.
+            <p class="cp-rfid-desc">
+                Изберете потребител и зона, за да симулирате приближаване на RFID карта.
             </p>
 
-            @* Избор на потребител — попълва се от ViewBag.Users *@
-            <div class="cp-form-group" style="margin-bottom:16px">
-                <label class="cp-label">Потребител (имейл)</label>
-                <select id="userSelect" class="cp-form-control">
-                    <option value="">— Изберете потребител —</option>
-                    @if (ViewBag.Users != null)
+            <div class="cp-form-group cp-rfid-group-mb">
+                <label class="cp-form-label">Потребител</label>
+                <select id="selUser" class="cp-form-control">
+                    <option value="">— изберете потребител —</option>
+                    @foreach (var u in ViewBag.Users)
                     {
-                        foreach (var user in ViewBag.Users)
-                        {
-                            @* Показваме имейл + пълно ime ако има *@
-                            <option value="@user.Email">@user.Email @(user.FullName != null ? $"({user.FullName})" : "")</option>
-                        }
+                        <option value="@u.Email">@(u.FullName ?? u.Email)</option>
                     }
                 </select>
             </div>
 
-            @* Избор на зона — попълва се от ViewBag.Rooms *@
-            <div class="cp-form-group" style="margin-bottom:24px">
-                <label class="cp-label">Зона</label>
-                <select id="roomSelect" class="cp-form-control">
-                    <option value="">— Изберете зона —</option>
-                    @if (ViewBag.Rooms != null)
+            <div class="cp-form-group cp-rfid-group-mb-lg">
+                <label class="cp-form-label">Зона</label>
+                <select id="selRoom" class="cp-form-control">
+                    <option value="">— изберете зона —</option>
+                    @foreach (var r in ViewBag.Rooms)
                     {
-                        foreach (var room in ViewBag.Rooms)
-                        {
-                            <option value="@room.Id">@room.RoomName (@room.RoomCode)</option>
-                        }
+                        <option value="@r.Id">@r.RoomName (@r.RoomCode)</option>
                     }
                 </select>
             </div>
 
-            @* Бутон за стартиране на симулацията *@
-            <button id="btnSimulate" class="cp-btn cp-btn-primary" style="width:100%; justify-content:center" onclick="simulate()">
-                Симулирай четец
+            <button id="btnSimulate" class="cp-btn cp-btn-primary cp-rfid-submit" onclick="simulate()">
+                <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0 1 12 2v5h4a1 1 0 0 1 .82 1.573l-7 10A1 1 0 0 1 8 18v-5H4a1 1 0 0 1-.82-1.573l7-10a1 1 0 0 1 1.12-.38z" clip-rule="evenodd" /></svg>
+                Симулирай достъп
             </button>
 
-            @* Резултатът се показва тук след API отговора *@
-            <div id="result" style="margin-top:20px; display:none"></div>
-
+            <div id="result" class="cp-rfid-result"></div>
         </div>
     </div>
 
-    @* ---- ДЯСНА КАРТА: обяснение как работи системата ---- *@
     <div class="cp-card">
         <div class="cp-card-header">
             <span class="cp-card-title">Как работи?</span>
         </div>
         <div class="cp-card-body">
-            <div style="display:flex; flex-direction:column; gap:16px; font-size:13px; color:var(--text-secondary)">
-
-                @* Стъпка 1 *@
-                <div style="display:flex; gap:12px">
-                    <div style="width:28px; height:28px; border-radius:50%; background:#dbeafe; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:12px">1</div>
-                    <div><strong style="color:var(--text)">Изберете потребител и зона</strong><br>Симулира приближаване на RFID карта до четец на избраната зона.</div>
+            <div class="cp-rfid-steps">
+                <div class="cp-rfid-step">
+                    <div class="cp-rfid-step-num cp-rfid-step-num-blue">1</div>
+                    <div><strong>Изберете потребител и зона</strong><br>Симулира приближаване на RFID карта до четец на избраната зона.</div>
                 </div>
-
-                @* Стъпка 2 *@
-                <div style="display:flex; gap:12px">
-                    <div style="width:28px; height:28px; border-radius:50%; background:#dbeafe; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:12px">2</div>
-                    <div><strong style="color:var(--text)">Системата проверява</strong><br>Дали потребителят има одобрена заявка за тази зона.</div>
+                <div class="cp-rfid-step">
+                    <div class="cp-rfid-step-num cp-rfid-step-num-blue">2</div>
+                    <div><strong>Системата проверява</strong><br>Дали потребителят има одобрена заявка за тази зона.</div>
                 </div>
-
-                @* Резултат: одобрен *@
-                <div style="display:flex; gap:12px">
-                    <div style="width:28px; height:28px; border-radius:50%; background:#dcfce7; color:#16a34a; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:12px">✓</div>
-                    <div><strong style="color:#16a34a">Одобрен достъп</strong><br>Вратата се отваря → записва се в логовете.</div>
+                <div class="cp-rfid-step">
+                    <div class="cp-rfid-step-num cp-rfid-step-num-green">✓</div>
+                    <div><strong class="cp-check-yes-text">Одобрен достъп</strong><br>Вратата се отваря → записва се в логовете.</div>
                 </div>
-
-                @* Резултат: отказан *@
-                <div style="display:flex; gap:12px">
-                    <div style="width:28px; height:28px; border-radius:50%; background:#fee2e2; color:#dc2626; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; font-size:12px">✗</div>
-                    <div><strong style="color:#dc2626">Отказан достъп</strong><br>Вратата остава заключена → записва се в логовете.</div>
+                <div class="cp-rfid-step">
+                    <div class="cp-rfid-step-num cp-rfid-step-num-red">✗</div>
+                    <div><strong class="cp-check-no-text">Отказан достъп</strong><br>Вратата остава заключена → записва се в логовете.</div>
                 </div>
-
-                @* API endpoint информация *@
-                <div style="padding:12px; background:#f8fafc; border-radius:8px; border:1px solid var(--border); font-size:12px">
-                    <strong>API Endpoint:</strong><br>
-                    <code style="font-size:11px; color:#6366f1">/api/rfid/check?userEmail=...&amp;roomId=...</code>
+                <div class="cp-rfid-note">
+                    Реалното устройство изпраща GET заявка към:<br>
+                    <code class="cp-rfid-code">/api/rfid/check?userEmail=...&amp;roomId=...</code>
                 </div>
-
             </div>
         </div>
     </div>
 
 </div>
 
-@* ===== JAVASCRIPT: AJAX ЗАЯВКА КЪМ RFID API ===== *@
 <script>
     async function simulate() {
-        var email  = document.getElementById('userSelect').value;
-        var roomId = document.getElementById('roomSelect').value;
+        var email  = document.getElementById('selUser').value;
+        var roomId = document.getElementById('selRoom').value;
         var result = document.getElementById('result');
-        var btn    = document.getElementById('btnSimulate');
 
-        @* Проверяваме дали са избрани и двете полета *@
+        result.style.display = 'block';
+
         if (!email || !roomId) {
-            result.style.display = 'block';
             result.innerHTML = '<div style="padding:14px; background:#fef9c3; border:1px solid #fde047; border-radius:8px; font-size:13px; color:#854d0e">⚠️ Моля, изберете потребител и зона!</div>';
             return;
         }
 
-        @* Деактивираме бутона докато чакаме отговор *@
-        btn.disabled = true;
-        btn.textContent = 'Проверява се...';
+        result.innerHTML = '<div class="cp-empty"><div class="cp-empty-sub">Проверява се...</div></div>';
 
         try {
-            @* Изпращаме GET заявка към RFID API *@
-            var response = await fetch('/api/rfid/check?userEmail=' + encodeURIComponent(email) + '&roomId=' + roomId);
-            var data     = await response.json();
+            var resp = await fetch('/api/rfid/check?userEmail=' + encodeURIComponent(email) + '&roomId=' + roomId);
+            var data = await resp.json();
 
-            result.style.display = 'block';
-
-            @* Показваме резултата според отговора от API *@
             if (data.status === 'Approved') {
                 result.innerHTML = `
                     <div style="padding:16px; background:#f0fdf4; border:2px solid #16a34a; border-radius:10px; text-align:center">
@@ -160,12 +122,7 @@
                     </div>`;
             }
         } catch (e) {
-            @* Грешка при свързване с API *@
             result.innerHTML = '<div style="padding:14px; background:#fef2f2; border:1px solid #fca5a5; border-radius:8px; font-size:13px; color:#991b1b">❌ Грешка при свързване с API.</div>';
-        } finally {
-            @* Винаги връщаме бутона в нормалното му състояние *@
-            btn.disabled = false;
-            btn.textContent = 'Симулирай четец';
         }
     }
 </script>

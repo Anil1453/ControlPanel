@@ -1,34 +1,19 @@
-@* Страница за отказан достъп — показва се при липса на права *@
 @{
     ViewData["Title"] = "Достъпът е отказан";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@* Центрираме съдържанието вертикално на страницата *@
-<div style="display:flex; align-items:center; justify-content:center; min-height:60vh">
-    <div style="text-align:center; max-width:420px">
-
-        @* Червена икона за забрана *@
-        <div style="width:64px; height:64px; background:var(--red-bg); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px">
-            <svg style="width:28px; height:28px; color:var(--red)" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 0 1 5.11 6.524L13.477 14.89zm1.414-1.414L6.524 5.11a6 6 0 0 1 8.367 8.367zM18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0z" clip-rule="evenodd" />
+<div class="cp-denied-wrap">
+    <div class="cp-denied-inner">
+        <div class="cp-denied-icon-wrap">
+            <svg class="cp-denied-svg" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 0 1 5.11 6.524L13.476 14.89zm1.414-1.414A6 6 0 0 0 6.524 5.11L14.89 13.476zM18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0z" clip-rule="evenodd" />
             </svg>
         </div>
-
-        @* Заглавие и обяснение *@
-        <div style="font-size:22px; font-weight:700; color:var(--text); margin-bottom:8px">Достъпът е отказан</div>
-        <div style="font-size:14px; color:var(--muted); margin-bottom:28px; line-height:1.6">
-            Нямате необходимите права за тази страница.<br>
-            Свържете се с администратор ако смятате, че това е грешка.
+        <div class="cp-denied-title">Достъпът е отказан</div>
+        <div class="cp-denied-sub">
+            Нямате необходимите права за достъп до тази страница.<br />
+            Свържете се с администратора ако смятате, че това е грешка.
         </div>
-
-        @* Бутон за връщане към началната страница *@
-        <a href="/" class="cp-btn cp-btn-primary">
-            <svg fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10.707 2.293a1 1 0 0 0-1.414 0l-7 7a1 1 0 0 0 1.414 1.414L4 10.414V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h2v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-7-7z" />
-            </svg>
-            Към началната страница
-        </a>
-
+        <a href="/" class="cp-btn cp-btn-primary">← Към начало</a>
     </div>
 </div>

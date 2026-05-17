@@ -1,20 +1,12 @@
-@* Профилна страница — показва и редактира данните на текущия потребител *@
+@* Профилна страница *@
 @model ControlPanel.Models.ApplicationUser
-
 @{
     ViewData["Title"] = "Профил";
-
-    @* Вземаме инициалите от пълното име или имейла *@
     var initials = (Model.FullName ?? Model.Email ?? "??").Substring(0, 2).ToUpper();
-
-    @* Проверяваме дали потребителят има качена снимка *@
     var hasPhoto = !string.IsNullOrEmpty(Model.ProfilePicture);
-
-    @* Взимаме ролята от ViewBag *@
     var role = ViewBag.Role as string;
 }
 
-@* ===== ЗАГЛАВНА ЛЕНТА ===== *@
 <div class="cp-page-header">
     <div>
         <div class="cp-page-title">Моят профил</div>
@@ -22,108 +14,82 @@
     </div>
 </div>
 
-@* ===== ДВЕ КОЛОНИ: ПРОФИЛНА КАРТА + ФОРМА ЗА РЕДАКТИРАНЕ ===== *@
 <div class="cp-grid-2">
 
-    @* ---- ЛЯВА КАРТА: профилна снимка, роля, статистики ---- *@
     <div class="cp-card">
-        <div class="cp-card-body" style="display:flex; flex-direction:column; align-items:center; text-align:center; padding:32px 20px">
+        <div class="cp-card-body cp-flex-col-center">
 
-            @* Профилна снимка или инициали ако няма снимка *@
-            <div style="position:relative; margin-bottom:20px">
+            <div class="cp-avatar-wrap">
                 @if (hasPhoto)
                 {
-                    @* Показваме качената снимка *@
-                    <img src="/uploads/@Model.ProfilePicture" alt="Профил"
-                         style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--border)" />
+                    <img src="/uploads/@Model.ProfilePicture" alt="Профил" class="cp-avatar-img" />
                 }
                 else
                 {
-                    @* Показваме цветен кръг с инициали *@
-                    <div style="width:100px; height:100px; border-radius:50%; background:#2563eb; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:700; color:#fff; border:3px solid var(--border)">
-                        @initials
-                    </div>
+                    <div class="cp-avatar-initials">@initials</div>
                 }
             </div>
 
-            @* Пълно ime и имейл *@
-            <div style="font-size:18px; font-weight:700; margin-bottom:4px">@(Model.FullName ?? "—")</div>
-            <div style="font-size:13px; color:var(--muted); margin-bottom:8px">@Model.Email</div>
+            <div class="cp-profile-name">@(Model.FullName ?? "—")</div>
+            <div class="cp-profile-email">@Model.Email</div>
 
-            @* Badge с ролята на потребителя *@
             @if (role == "Admin")
             {
-                <span class="cp-badge cp-badge-blue" style="margin-bottom:20px">Администратор</span>
+                <span class="cp-badge cp-badge-blue cp-badge-mb">Администратор</span>
             }
             else if (role == "Мениджър")
             {
-
-                <span class="cp-badge cp-badge-amber" style="margin-bottom:20px">Мениджър</span>
+                <span class="cp-badge cp-badge-amber cp-badge-mb">Мениджър</span>
             }
             else if (role == "Служител")
             {
-
-                <span class="cp-badge cp-badge-gray" style="margin-bottom:20px">Служител</span>
+                <span class="cp-badge cp-badge-gray cp-badge-mb">Служител</span>
             }
             else
             {
-
-                <span class="cp-badge cp-badge-gray" style="margin-bottom:20px">Потребител</span>
+                <span class="cp-badge cp-badge-gray cp-badge-mb">Потребител</span>
             }
 
-            @* Мини статистики: общо заявки и одобрени *@
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; margin-top:8px">
-                <div style="background:var(--gray-bg); border-radius:var(--r); padding:12px; text-align:center">
-                    <div style="font-size:22px; font-weight:700; color:var(--text)">@ViewBag.TotalRequests</div>
-                    <div style="font-size:11px; color:var(--muted); margin-top:2px">Заявки</div>
+            <div class="cp-profile-stats">
+                <div class="cp-profile-stat-box">
+                    <div class="cp-profile-stat-num">@ViewBag.TotalRequests</div>
+                    <div class="cp-profile-stat-label">Заявки</div>
                 </div>
-                <div style="background:var(--gray-bg); border-radius:var(--r); padding:12px; text-align:center">
-                    <div style="font-size:22px; font-weight:700; color:#16a34a">@ViewBag.ApprovedRequests</div>
-                    <div style="font-size:11px; color:var(--muted); margin-top:2px">Одобрени</div>
+                <div class="cp-profile-stat-box">
+                    <div class="cp-profile-stat-num-green">@ViewBag.ApprovedRequests</div>
+                    <div class="cp-profile-stat-label">Одобрени</div>
                 </div>
             </div>
 
-            @* Дата на регистрация *@
-            <div style="font-size:12px; color:var(--hint); margin-top:16px">
+            <div class="cp-profile-regdate">
                 Регистриран на @Model.RegistrationDate.ToString("dd.MM.yyyy")
             </div>
 
         </div>
     </div>
 
-    @* ---- ДЯСНА КОЛОНА: форма за редактиране + премахване на снимка ---- *@
-    <div style="display:flex; flex-direction:column; gap:20px">
+    <div class="cp-flex-col-gap20">
 
-        @* Форма за редактиране на профила *@
         <div class="cp-card">
             <div class="cp-card-header">
                 <span class="cp-card-title">Редактирай информацията</span>
             </div>
             <div class="cp-card-body">
-                @* enctype="multipart/form-data" е необходим за качване на файлове *@
                 <form asp-action="Update" method="post" enctype="multipart/form-data">
                     @Html.AntiForgeryToken()
-
-                    @* Поле: Пълно ime *@
                     <div class="cp-form-group">
                         <label class="cp-form-label">Пълно ime</label>
                         <input name="fullName" value="@Model.FullName" class="cp-form-control" placeholder="напр. Иван Петров" />
                     </div>
-
-                    @* Поле: Отдел *@
                     <div class="cp-form-group">
                         <label class="cp-form-label">Отдел</label>
                         <input name="department" value="@Model.Department" class="cp-form-control" placeholder="напр. IT отдел" />
                     </div>
-
-                    @* Поле: Качване на нова профилна снимка *@
                     <div class="cp-form-group">
                         <label class="cp-form-label">Профилна снимка</label>
                         <input name="profilePicture" type="file" accept="image/*" class="cp-form-control" />
                         <div class="cp-form-hint">JPG, PNG, GIF или WebP — максимум 2MB</div>
                     </div>
-
-                    @* Бутон за запазване *@
                     <div class="cp-form-actions">
                         <button type="submit" class="cp-btn cp-btn-primary">
                             <svg fill="currentColor" viewBox="0 0 20 20">
@@ -136,7 +102,6 @@
             </div>
         </div>
 
-        @* Карта за премахване на снимката — показва се само ако има качена снимка *@
         @if (hasPhoto)
         {
             <div class="cp-card">
@@ -144,10 +109,9 @@
                     <span class="cp-card-title">Премахни снимката</span>
                 </div>
                 <div class="cp-card-body">
-                    <p style="font-size:13px; color:var(--muted); margin-bottom:16px">
+                    <p class="cp-hint-text">
                         Профилната ви снимка ще бъде изтрита и ще се върне иницилата по подразбиране.
                     </p>
-                    @* Отделна форма само за изтриване на снимката *@
                     <form asp-action="RemovePicture" method="post">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="cp-btn cp-btn-danger">

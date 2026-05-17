@@ -22,34 +22,34 @@
 @* ===== ДИАГРАМА — показва се само ако има записи ===== *@
 @if (total > 0)
 {
-    <div class="cp-card" style="max-width:420px; margin-bottom:20px">
+    <div class="cp-card cp-card-sm">
         <div class="cp-card-header">
             <span class="cp-card-title">Разпределение на достъпа</span>
-            <span style="font-size:12px; color:var(--muted)">@total записа</span>
+            <span class="cp-detail-count">@total записа</span>
         </div>
-        <div class="cp-card-body" style="display:flex; align-items:center; gap:24px">
+        <div class="cp-card-body cp-flex-gap24">
 
             @* Кръгова диаграма (Chart.js) *@
-            <div style="width:110px; height:110px; flex-shrink:0">
+            <div class="cp-chart-wrap">
                 <canvas id="logChart"></canvas>
             </div>
 
             @* Легенда *@
-            <div style="flex:1; display:flex; flex-direction:column; gap:8px">
-                <div style="display:flex; align-items:center; gap:8px">
-                    <div style="width:10px; height:10px; border-radius:2px; background:#16a34a; flex-shrink:0"></div>
-                    <div style="font-size:13px; flex:1">Одобрени</div>
-                    <div style="font-weight:700; color:#16a34a; font-size:14px">@approved</div>
+            <div class="cp-legend">
+                <div class="cp-legend-row">
+                    <div class="cp-legend-dot cp-legend-dot-green"></div>
+                    <div class="cp-legend-label">Одобрени</div>
+                    <div class="cp-legend-val cp-legend-val-green">@approved</div>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px">
-                    <div style="width:10px; height:10px; border-radius:2px; background:#dc2626; flex-shrink:0"></div>
-                    <div style="font-size:13px; flex:1">Отказани</div>
-                    <div style="font-weight:700; color:#dc2626; font-size:14px">@denied</div>
+                <div class="cp-legend-row">
+                    <div class="cp-legend-dot cp-legend-dot-red"></div>
+                    <div class="cp-legend-label">Отказани</div>
+                    <div class="cp-legend-val cp-legend-val-red">@denied</div>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px">
-                    <div style="width:10px; height:10px; border-radius:2px; background:#d97706; flex-shrink:0"></div>
-                    <div style="font-size:13px; flex:1">В изчакване</div>
-                    <div style="font-weight:700; color:#d97706; font-size:14px">@pending</div>
+                <div class="cp-legend-row">
+                    <div class="cp-legend-dot cp-legend-dot-amber"></div>
+                    <div class="cp-legend-label">В изчакване</div>
+                    <div class="cp-legend-val cp-legend-val-amber">@pending</div>
                 </div>
             </div>
         </div>
@@ -82,7 +82,7 @@
 
 @* ===== ФИЛТЪР: СТАТУС + ТЪРСЕНЕ ===== *@
 <div class="cp-filter-bar">
-    <form method="get" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+    <form method="get" class="cp-search-form">
 
         @* Филтър по статус *@
         <select name="status" onchange="this.form.submit()">
@@ -98,21 +98,21 @@
                value="@ViewBag.SearchQuery"
                placeholder="Търси по имейл..."
                class="cp-form-control"
-               style="width:220px; height:36px; padding:0 10px; font-size:13px" />
+               class="cp-search-input-sm cp-form-control" />
 
-        <button type="submit" class="cp-btn cp-btn-ghost" style="height:36px; padding:0 14px; font-size:13px">
+        <button type="submit" class="cp-btn cp-btn-ghost cp-search-btn">
             Търси
         </button>
 
         @* Бутон "Изчисти" — само ако има активен филтър *@
         @if (!string.IsNullOrEmpty(ViewBag.SelectedStatus as string) || !string.IsNullOrEmpty(ViewBag.SearchQuery as string))
         {
-            <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="height:36px; padding:0 14px; font-size:13px; color:#ef4444">
+            <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost cp-search-clear">
                 × Изчисти
             </a>
         }
 
-        <span style="font-size:12px; color:var(--muted); margin-left:auto">@Model.Count() записа</span>
+        <span class="cp-record-count">@Model.Count() записа</span>
     </form>
 </div>
 
@@ -139,17 +139,17 @@
 
                             @* Потребител с аватар *@
                             <td>
-                                <div style="display:flex; align-items:center; gap:8px">
+                                <div class="cp-legend-row">
                                     <div class="cp-avatar">@(log.User?.Email?.Substring(0, 2).ToUpper() ?? "??")</div>
-                                    <span style="font-weight:500">@(log.User?.Email ?? "—")</span>
+                                    <span class="cp-user-email">@(log.User?.Email ?? "—")</span>
                                 </div>
                             </td>
 
-                            <td style="font-weight:500">@(log.Room?.RoomName ?? "—")</td>
-                            <td style="color:var(--muted); font-size:13px">@log.EntryTime.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="cp-room-name">@(log.Room?.RoomName ?? "—")</td>
+                            <td class="cp-td-muted-sm">@log.EntryTime.ToString("dd.MM.yyyy HH:mm")</td>
 
                             @* Час на излизане — ако няма, показваме тире *@
-                            <td style="color:var(--muted); font-size:13px">
+                            <td class="cp-td-muted-sm">
                                 @if (log.ExitTime.HasValue)
                                 {
                                     @log.ExitTime.Value.ToString("dd.MM.yyyy HH:mm")
@@ -157,7 +157,7 @@
                                 else
                                 {
 
-                                    <span style="color:var(--hint)">—</span>
+                                    <span class="cp-mini-code">—</span>
                                 }
                             </td>
 
@@ -179,7 +179,7 @@
                                 }
                             </td>
 
-                            <td style="color:var(--muted); font-size:13px">
+                            <td class="cp-td-muted-sm">
                                 @(string.IsNullOrEmpty(log.Notes) ? "—" : log.Notes)
                             </td>
                         </tr>

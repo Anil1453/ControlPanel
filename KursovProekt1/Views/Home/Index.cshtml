@@ -13,7 +13,6 @@
 </div>
 
 @* ===== СТАТИСТИЧЕСКИ КАРТИ ===== *@
-@* Admin вижда 4 карти, останалите виждат 2 *@
 @if (User.IsInRole("Admin"))
 {
     <div class="cp-stats">
@@ -41,8 +40,7 @@
 }
 else
 {
-    @* Обикновени потребители виждат само 2 карти *@
-    <div class="cp-stats" style="grid-template-columns:repeat(2,minmax(0,1fr)); max-width:600px">
+    <div class="cp-stats cp-stats-2col">
         <a href="/Room/Index" class="cp-stat-card">
             <div class="cp-stat-top"><div class="cp-stat-icon blue"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 0 0-.788 0l-7 3a1 1 0 0 0 0 1.84L5.25 8.051a.999.999 0 0 1 .356-.412L10 5.306l4.394 2.333a.999.999 0 0 1 .356.412l2.644-1.131a1 1 0 0 0 0-1.84l-7-3zM3.31 9.397L5 10.12V15a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-4.88l1.69-.723a1 1 0 0 0 0-1.84L10 5.694l-6.69 2.863a1 1 0 0 0 0 1.84z" /></svg></div><span class="cp-stat-arrow">→</span></div>
             <div class="cp-stat-num">@ViewBag.БройСтаи</div>
@@ -59,13 +57,12 @@ else
 @* ===== ДВЕ КАРТИ: ПОСЛЕДНИ ЛОГОВЕ + ЗОНИ ===== *@
 <div class="cp-grid-2">
 
-    @* Последни логове *@
     <div class="cp-card">
         <div class="cp-card-header">
             <span class="cp-card-title">Последни логове</span>
             @if (User.IsInRole("Admin"))
             {
-                <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px; font-size:12px">Виж всички →</a>
+                <a href="/AccessLog/Index" class="cp-btn cp-btn-ghost cp-btn-xs">Виж всички →</a>
             }
         </div>
         <div class="cp-card-body">
@@ -73,7 +70,6 @@ else
             {
                 foreach (var лог in ViewBag.ПоследниЛогове)
                 {
-                    @* Цветна точка според статуса *@
                     <div class="cp-mini-row">
                         <div class="cp-mini-dot @(лог.Status == "Approved" ? "green" : лог.Status == "Denied" ? "red" : "amber")"></div>
                         <div class="cp-mini-text">@(лог.User?.Email ?? "—") → @(лог.Room?.RoomName ?? "—")</div>
@@ -83,20 +79,19 @@ else
             }
             else
             {
-                <div class="cp-empty" style="padding:24px">
+                <div class="cp-empty cp-empty-padded">
                     <div class="cp-empty-sub">Все още няма логове.</div>
                 </div>
             }
         </div>
     </div>
 
-    @* Зони за сигурност *@
     <div class="cp-card">
         <div class="cp-card-header">
             <span class="cp-card-title">Зони за сигурност</span>
             @if (User.IsInRole("Admin"))
             {
-                <a href="/Room/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px; font-size:12px">Управлявай →</a>
+                <a href="/Room/Index" class="cp-btn cp-btn-ghost cp-btn-xs">Управлявай →</a>
             }
         </div>
         <div class="cp-card-body">
@@ -105,9 +100,9 @@ else
                 foreach (var стая in ViewBag.ПоследниСтаи)
                 {
                     <div class="cp-mini-row">
-                        <div style="flex:1">
-                            <div style="font-size:14px; font-weight:500">@стая.RoomName</div>
-                            <div style="font-size:12px; color:var(--hint)">@стая.RoomCode</div>
+                        <div class="cp-mini-info">
+                            <div class="cp-mini-name">@стая.RoomName</div>
+                            <div class="cp-mini-code">@стая.RoomCode</div>
                         </div>
                         <span class="cp-level cp-level-@стая.AccessLevel">Ниво @стая.AccessLevel</span>
                     </div>
@@ -115,7 +110,7 @@ else
             }
             else
             {
-                <div class="cp-empty" style="padding:24px">
+                <div class="cp-empty cp-empty-padded">
                     <div class="cp-empty-sub">Все още няма зони.</div>
                 </div>
             }
@@ -124,41 +119,37 @@ else
 
 </div>
 
-@* ===== ДИАГРАМА НА ЗАЯВКИТЕ — само Admin и Мениджър ===== *@
+@* ===== ДИАГРАМА НА ЗАЯВКИТЕ ===== *@
 @if ((User.IsInRole("Admin") || User.IsInRole("Мениджър")) && (int)ViewBag.БройЗаявки > 0)
 {
     int одобрени = (int)ViewBag.ОдобрениЗаявки;
     int отказани = (int)ViewBag.ОтказаниЗаявки;
-    int чакащи = (int)ViewBag.ЧакащиЗаявки;
+    int чакащи   = (int)ViewBag.ЧакащиЗаявки;
 
-    <div class="cp-card" style="max-width:420px; margin-top:20px">
+    <div class="cp-card cp-card-sm cp-card-mt">
         <div class="cp-card-header">
             <span class="cp-card-title">Статистика на заявките</span>
-            <a href="/AccessRequest/Index" class="cp-btn cp-btn-ghost" style="padding:5px 10px; font-size:12px">Виж всички →</a>
+            <a href="/AccessRequest/Index" class="cp-btn cp-btn-ghost cp-btn-xs">Виж всички →</a>
         </div>
-        <div class="cp-card-body" style="display:flex; align-items:center; gap:24px">
-
-            @* Кръгова диаграма *@
-            <div style="width:110px; height:110px; flex-shrink:0">
+        <div class="cp-card-body cp-flex-gap24">
+            <div class="cp-chart-wrap">
                 <canvas id="zaявkiChart"></canvas>
             </div>
-
-            @* Легенда *@
-            <div style="flex:1; display:flex; flex-direction:column; gap:8px">
-                <div style="display:flex; align-items:center; gap:8px">
-                    <div style="width:10px; height:10px; border-radius:2px; background:#16a34a; flex-shrink:0"></div>
-                    <div style="font-size:13px; flex:1">Одобрени</div>
-                    <div style="font-weight:700; color:#16a34a; font-size:14px">@одобрени</div>
+            <div class="cp-legend">
+                <div class="cp-legend-row">
+                    <div class="cp-legend-dot cp-legend-dot-green"></div>
+                    <div class="cp-legend-label">Одобрени</div>
+                    <div class="cp-legend-val cp-legend-val-green">@одобрени</div>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px">
-                    <div style="width:10px; height:10px; border-radius:2px; background:#dc2626; flex-shrink:0"></div>
-                    <div style="font-size:13px; flex:1">Отказани</div>
-                    <div style="font-weight:700; color:#dc2626; font-size:14px">@отказани</div>
+                <div class="cp-legend-row">
+                    <div class="cp-legend-dot cp-legend-dot-red"></div>
+                    <div class="cp-legend-label">Отказани</div>
+                    <div class="cp-legend-val cp-legend-val-red">@отказани</div>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px">
-                    <div style="width:10px; height:10px; border-radius:2px; background:#d97706; flex-shrink:0"></div>
-                    <div style="font-size:13px; flex:1">В изчакване</div>
-                    <div style="font-weight:700; color:#d97706; font-size:14px">@чакащи</div>
+                <div class="cp-legend-row">
+                    <div class="cp-legend-dot cp-legend-dot-amber"></div>
+                    <div class="cp-legend-label">В изчакване</div>
+                    <div class="cp-legend-val cp-legend-val-amber">@чакащи</div>
                 </div>
             </div>
         </div>

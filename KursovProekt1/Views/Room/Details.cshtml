@@ -14,7 +14,7 @@
         <div class="cp-page-title">@Model.RoomName</div>
         <div class="cp-page-subtitle">Детайли и потребители с достъп</div>
     </div>
-    <div style="display:flex; gap:8px">
+    <div class="cp-flex-gap8">
         @* Редактиране — само Admin и Мениджър *@
         @if (User.IsInRole("Admin") || User.IsInRole("Мениджър"))
         {
@@ -46,23 +46,23 @@
             }
         </div>
         <div class="cp-card-body">
-            <div style="display:flex; flex-direction:column; gap:14px">
+            <div class="cp-flex-col-gap20">
 
                 @* Ред: Ime *@
-                <div style="display:flex; justify-content:space-between; padding-bottom:12px; border-bottom:1px solid var(--border)">
-                    <span style="font-size:13px; color:var(--muted)">Име на зоната</span>
-                    <span style="font-size:14px; font-weight:600">@Model.RoomName</span>
+                <div class="cp-flex-sb">
+                    <span class="cp-detail-label">Име на зоната</span>
+                    <span class="cp-detail-value">@Model.RoomName</span>
                 </div>
 
                 @* Ред: Код *@
-                <div style="display:flex; justify-content:space-between; padding-bottom:12px; border-bottom:1px solid var(--border)">
-                    <span style="font-size:13px; color:var(--muted)">Код</span>
-                    <span style="font-family:monospace; font-size:13px; background:#f3f4f6; padding:2px 8px; border-radius:4px">@Model.RoomCode</span>
+                <div class="cp-flex-sb">
+                    <span class="cp-detail-label">Код</span>
+                    <span class="cp-room-code-lg">@Model.RoomCode</span>
                 </div>
 
                 @* Ред: Ниво на достъп *@
-                <div style="display:flex; justify-content:space-between; padding-bottom:12px; border-bottom:1px solid var(--border)">
-                    <span style="font-size:13px; color:var(--muted)">Ниво на достъп</span>
+                <div class="cp-flex-sb">
+                    <span class="cp-detail-label">Ниво на достъп</span>
                     <span class="cp-level cp-level-@Model.AccessLevel">
                         @switch (Model.AccessLevel)
                         {
@@ -86,9 +86,9 @@
                 </div>
 
                 @* Ред: Описание *@
-                <div style="display:flex; justify-content:space-between">
-                    <span style="font-size:13px; color:var(--muted)">Описание</span>
-                    <span style="font-size:14px; color:var(--text); text-align:right; max-width:60%">
+                <div class="cp-flex-sb-last">
+                    <span class="cp-detail-label">Описание</span>
+                    <span class="cp-detail-value-sm">
                         @(string.IsNullOrEmpty(Model.Description) ? "—" : Model.Description)
                     </span>
                 </div>
@@ -101,7 +101,7 @@
     <div class="cp-card">
         <div class="cp-card-header">
             <span class="cp-card-title">Потребители с достъп</span>
-            <span style="font-size:12px; color:var(--muted)">@(users?.Count() ?? 0) потребителя</span>
+            <span class="cp-detail-count">@(users?.Count() ?? 0) потребителя</span>
         </div>
         <div class="cp-card-body-flush">
             @if (users != null && users.Any())
@@ -118,12 +118,12 @@
                         {
                             <tr>
                                 <td>
-                                    <div style="display:flex; align-items:center; gap:8px">
+                                    <div class="cp-flex-gap8">
                                         <div class="cp-avatar green">@((req.User?.Email ?? "??").Substring(0, 2).ToUpper())</div>
-                                        <span style="font-size:13px; font-weight:500">@(req.User?.Email ?? "—")</span>
+                                        <span class="cp-user-email">@(req.User?.Email ?? "—")</span>
                                     </div>
                                 </td>
-                                <td style="font-size:12px; color:var(--muted)">
+                                <td class="cp-td-muted">
                                     @(req.ApprovalDate != null ? ((DateTime)req.ApprovalDate).ToString("dd.MM.yyyy HH:mm") : "—")
                                 </td>
                             </tr>
@@ -149,14 +149,14 @@
 </div>
 
 @* ===== КАРТА: В МОМЕНТА В ЗОНАТА (ЖИВО) ===== *@
-<div class="cp-card" style="margin-top:20px">
+<div class="cp-card cp-card-mt">
     <div class="cp-card-header">
         <span class="cp-card-title">
             @* Зелена точка с анимация — показва живо присъствие *@
-            <span style="display:inline-block; width:8px; height:8px; background:#16a34a; border-radius:50%; margin-right:6px; animation:pulse 2s infinite"></span>
+            <span class="cp-live-dot"></span>
             В момента в зоната
         </span>
-        <span style="font-size:12px; color:var(--muted)">@insideCount потребителя вътре</span>
+        <span class="cp-td-muted">@insideCount потребителя вътре</span>
     </div>
     <div class="cp-card-body-flush">
         @if (insideUsers != null && insideUsers.Any())
@@ -174,12 +174,12 @@
                     {
                         <tr>
                             <td>
-                                <div style="display:flex; align-items:center; gap:8px">
+                                <div class="cp-flex-gap8">
                                     <div class="cp-avatar blue">@((log.User?.Email ?? "??").Substring(0, 2).ToUpper())</div>
-                                    <span style="font-size:13px; font-weight:500">@(log.User?.Email ?? "—")</span>
+                                    <span class="cp-user-email">@(log.User?.Email ?? "—")</span>
                                 </div>
                             </td>
-                            <td style="font-size:12px; color:var(--muted)">@log.EntryTime.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="cp-td-muted">@log.EntryTime.ToString("dd.MM.yyyy HH:mm")</td>
                             <td>
                                 <span class="cp-badge cp-badge-blue"><span class="dot"></span> Вътре в момента</span>
                             </td>
@@ -190,7 +190,7 @@
         }
         else
         {
-            <div class="cp-empty" style="padding:20px">
+            <div class="cp-empty cp-empty-padded">
                 <div class="cp-empty-sub">В момента няма потребители в тази зона.</div>
             </div>
         }

@@ -34,7 +34,7 @@
 @if (User.IsInRole("Admin") || User.IsInRole("Мениджър") || User.IsInRole("Служител"))
 {
     <div class="cp-filter-bar">
-        <form method="get" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <form method="get" class="cp-search-form">
 
             @* Търсене по имейл *@
             <input type="text"
@@ -42,21 +42,21 @@
                    value="@ViewBag.SearchQuery"
                    placeholder="Търси по имейл на потребител..."
                    class="cp-form-control"
-                   style="width:260px; height:36px; padding:0 10px; font-size:13px" />
+                   class="cp-search-input cp-form-control" />
 
-            <button type="submit" class="cp-btn cp-btn-ghost" style="height:36px; padding:0 14px; font-size:13px">
+            <button type="submit" class="cp-btn cp-btn-ghost cp-search-btn">
                 Търси
             </button>
 
             @* Бутон "Изчисти" — само ако има активно търсене *@
             @if (!string.IsNullOrEmpty(ViewBag.SearchQuery as string))
             {
-                <a href="/AccessRequest/Index" class="cp-btn cp-btn-ghost" style="height:36px; padding:0 14px; font-size:13px; color:#ef4444">
+                <a href="/AccessRequest/Index" class="cp-btn cp-btn-ghost cp-search-clear">
                     × Изчисти
                 </a>
             }
 
-            <span style="font-size:12px; color:var(--muted); margin-left:auto">@Model.Count() заявки</span>
+            <span class="cp-record-count">@Model.Count() заявки</span>
         </form>
     </div>
 }
@@ -90,7 +90,7 @@
                         <th>Статус</th>
                         @if (User.IsInRole("Admin") || User.IsInRole("Мениджър") || User.IsInRole("Служител"))
                         {
-                            <th style="text-align:right; padding-right:20px">Действия</th>
+                            <th class="cp-th-right">Действия</th>
                         }
                     </tr>
                 </thead>
@@ -101,15 +101,15 @@
 
                             @* Потребител с аватар *@
                             <td>
-                                <div style="display:flex; align-items:center; gap:8px">
+                                <div class="cp-flex-gap8">
                                     <div class="cp-avatar">@(req.User?.Email?.Substring(0, 2).ToUpper() ?? "??")</div>
-                                    <span style="font-size:13px; font-weight:500">@(req.User?.Email ?? "—")</span>
+                                    <span class="cp-user-email">@(req.User?.Email ?? "—")</span>
                                 </div>
                             </td>
 
-                            <td style="font-weight:500; color:var(--blue-text)">@(req.Room?.RoomName ?? "—")</td>
-                            <td style="color:var(--text-secondary); font-size:12px; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">@req.Reason</td>
-                            <td style="color:var(--text-secondary); font-size:12px">@req.RequestDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="cp-req-room">@(req.Room?.RoomName ?? "—")</td>
+                            <td class="cp-req-reason">@req.Reason</td>
+                            <td class="cp-req-date">@req.RequestDate.ToString("dd.MM.yyyy HH:mm")</td>
 
                             @* Статус badge *@
                             <td>
@@ -132,13 +132,13 @@
                             @* Одобри / Откажи — само за Admin, Мениджър, Служител *@
                             @if (User.IsInRole("Admin") || User.IsInRole("Мениджър") || User.IsInRole("Служител"))
                             {
-                                <td style="text-align:right; padding-right:16px">
+                                <td class="cp-td-right">
                                     @if (req.Status == "Pending")
                                     {
-                                        <div style="display:flex; gap:6px; justify-content:flex-end">
+                                        <div class="cp-flex-gap6">
 
                                             @* Бутон Одобри *@
-                                            <form method="post" asp-action="Approve" asp-route-id="@req.Id" style="display:inline">
+                                            <form method="post" asp-action="Approve" asp-route-id="@req.Id" class="cp-form-inline">
                                                 @Html.AntiForgeryToken()
                                                 <button type="submit" class="cp-btn-icon success" title="Одобри">
                                                     <svg fill="currentColor" viewBox="0 0 20 20">
@@ -148,7 +148,7 @@
                                             </form>
 
                                             @* Бутон Откажи *@
-                                            <form method="post" asp-action="Deny" asp-route-id="@req.Id" style="display:inline">
+                                            <form method="post" asp-action="Deny" asp-route-id="@req.Id" class="cp-form-inline">
                                                 @Html.AntiForgeryToken()
                                                 <button type="submit" class="cp-btn-icon danger" title="Откажи">
                                                     <svg fill="currentColor" viewBox="0 0 20 20">
@@ -162,7 +162,7 @@
                                     else
                                     {
                                         @* Ако вече е обработена — показваме отговора на администратора *@
-                                        <span style="font-size:11px; color:var(--text-muted)">@req.AdminResponse</span>
+                                        <span class="cp-req-admin-note">@req.AdminResponse</span>
                                     }
                                 </td>
                             }

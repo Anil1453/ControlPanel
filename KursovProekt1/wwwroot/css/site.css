@@ -636,3 +636,773 @@ textarea.cp-form-control { resize: vertical; min-height: 80px; }
     font-size: 12px;
     color: var(--muted);
 }
+/* ========================================================
+   INLINE STYLE'LARDAN DÖNÜŞTÜRÜLEN CLASS'LAR
+   ======================================================== */
+
+/* --- Genel yardımcılar --- */
+.cp-flex-col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 32px 20px;
+}
+
+.cp-avatar-wrap {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.cp-avatar-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border);
+}
+
+.cp-avatar-initials {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    border: 3px solid var(--border);
+}
+
+.cp-profile-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.cp-profile-email {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.cp-badge-mb {
+    margin-bottom: 20px;
+}
+
+.cp-profile-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.cp-profile-stat-box {
+    background: var(--gray-bg);
+    border-radius: var(--r);
+    padding: 12px;
+    text-align: center;
+}
+
+.cp-profile-stat-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.cp-profile-stat-num-green {
+    font-size: 22px;
+    font-weight: 700;
+    color: #16a34a;
+}
+
+.cp-profile-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.cp-profile-regdate {
+    font-size: 12px;
+    color: var(--hint);
+    margin-top: 16px;
+}
+
+.cp-flex-col-gap20 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cp-hint-text {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+}
+
+/* --- Kartlar --- */
+.cp-card-narrow {
+    max-width: 560px;
+}
+
+.cp-card-xs {
+    max-width: 500px;
+}
+
+.cp-card-sm {
+    max-width: 420px;
+}
+
+.cp-card-md {
+    max-width: 600px;
+}
+
+.cp-card-lg {
+    max-width: 700px;
+}
+
+.cp-card-mt {
+    margin-top: 20px;
+}
+
+/* --- Tablo yardımcıları --- */
+.cp-th-right {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.cp-td-right {
+    text-align: right;
+    padding-right: 16px;
+}
+
+.cp-td-truncate {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.cp-td-muted {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.cp-td-muted-sm {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* --- Oda adı ve kodu --- */
+.cp-room-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.cp-room-code {
+    font-family: monospace;
+    font-size: 12px;
+    background: #f3f4f6;
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+}
+
+.cp-room-code-lg {
+    font-family: monospace;
+    font-size: 13px;
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* --- Flex yardımcıları --- */
+.cp-flex-gap6 {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.cp-flex-gap8 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cp-flex-gap10 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cp-flex-gap12 {
+    display: flex;
+    gap: 12px;
+}
+
+.cp-flex-gap24 {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.cp-flex-sb {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.cp-flex-sb-last {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* --- Detay label/değer --- */
+.cp-detail-label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.cp-detail-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cp-detail-value-sm {
+    font-size: 14px;
+    color: var(--text);
+    text-align: right;
+    max-width: 60%;
+}
+
+.cp-detail-count {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* --- Kullanıcı satırı --- */
+.cp-user-email {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.cp-user-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* --- Delete kartı --- */
+.cp-delete-header {
+    background: #fef2f2;
+    border-bottom-color: #fecaca;
+}
+
+.cp-delete-title {
+    color: #991b1b;
+}
+
+.cp-delete-info {
+    background: var(--gray-light);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cp-delete-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.cp-delete-key {
+    color: var(--text-secondary);
+}
+
+.cp-delete-mono {
+    font-family: monospace;
+}
+
+.cp-delete-warning {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+/* --- Arama formu --- */
+.cp-search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cp-search-input {
+    width: 260px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 13px;
+}
+
+.cp-search-input-sm {
+    width: 220px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 13px;
+}
+
+.cp-search-btn {
+    height: 36px;
+    padding: 0 14px;
+    font-size: 13px;
+}
+
+.cp-search-clear {
+    height: 36px;
+    padding: 0 14px;
+    font-size: 13px;
+    color: #ef4444;
+}
+
+.cp-record-count {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: auto;
+}
+
+/* --- Küçük buton --- */
+.cp-btn-xs {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+/* --- RFID Simulator --- */
+.cp-rfid-online {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #16a34a;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.cp-rfid-dot {
+    width: 7px;
+    height: 7px;
+    background: #16a34a;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    display: inline-block;
+}
+
+.cp-rfid-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.cp-rfid-group-mb {
+    margin-bottom: 16px;
+}
+
+.cp-rfid-group-mb-lg {
+    margin-bottom: 24px;
+}
+
+.cp-rfid-submit {
+    width: 100%;
+    justify-content: center;
+}
+
+.cp-rfid-result {
+    margin-top: 20px;
+    display: none;
+}
+
+.cp-rfid-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.cp-rfid-step {
+    display: flex;
+    gap: 12px;
+}
+
+.cp-rfid-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 12px;
+}
+
+.cp-rfid-step-num-blue {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.cp-rfid-step-num-green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.cp-rfid-step-num-red {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.cp-rfid-note {
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.cp-rfid-code {
+    font-size: 11px;
+    color: #6366f1;
+}
+
+/* --- Access Denied sayfası --- */
+.cp-denied-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.cp-denied-inner {
+    text-align: center;
+    max-width: 420px;
+}
+
+.cp-denied-icon-wrap {
+    width: 64px;
+    height: 64px;
+    background: var(--red-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.cp-denied-svg {
+    width: 28px;
+    height: 28px;
+    color: var(--red);
+}
+
+.cp-denied-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.cp-denied-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+/* --- Layout --- */
+.cp-badge-count {
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+    min-width: 18px;
+    text-align: center;
+    line-height: 16px;
+}
+
+.cp-nav-section-mt {
+    margin-top: 12px;
+}
+
+.cp-avatar-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.cp-icon-sm {
+    width: 16px;
+    height: 16px;
+}
+
+/* --- Anasayfa --- */
+.cp-stats-2col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 600px;
+}
+
+.cp-mini-info {
+    flex: 1;
+}
+
+.cp-mini-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.cp-mini-code {
+    font-size: 12px;
+    color: var(--hint);
+}
+
+.cp-empty-padded {
+    padding: 24px;
+}
+
+/* --- Grafik / legend --- */
+.cp-chart-wrap {
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+}
+
+.cp-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cp-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cp-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.cp-legend-label {
+    font-size: 13px;
+    flex: 1;
+}
+
+.cp-legend-val {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.cp-legend-dot-green { background: #16a34a; }
+.cp-legend-dot-red   { background: #dc2626; }
+.cp-legend-dot-amber { background: #d97706; }
+.cp-legend-val-green { color: #16a34a; }
+.cp-legend-val-red   { color: #dc2626; }
+.cp-legend-val-amber { color: #d97706; }
+
+/* --- Rol kartları --- */
+.cp-roles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.cp-role-icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cp-role-icon-wrap-gray  { background: #f3f4f6; }
+.cp-role-icon-wrap-blue  { background: #eff6ff; }
+.cp-role-icon-wrap-amber { background: #fffbeb; }
+.cp-role-icon-wrap-solid { background: #2563eb; }
+
+.cp-role-svg-gray  { width: 18px; height: 18px; color: #6b7280; }
+.cp-role-svg-blue  { width: 18px; height: 18px; color: #2563eb; }
+.cp-role-svg-amber { width: 18px; height: 18px; color: #d97706; }
+.cp-role-svg-white { width: 18px; height: 18px; color: #fff; }
+
+.cp-role-name {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.cp-role-name-blue { font-size: 15px; font-weight: 600; color: #1e40af; }
+
+.cp-role-sub       { font-size: 12px; color: var(--muted); }
+.cp-role-sub-blue  { font-size: 12px; color: #3b82f6; }
+
+.cp-role-body-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cp-role-check-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cp-role-check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.cp-check-yes { color: #16a34a; font-size: 16px; font-weight: 700; }
+.cp-check-no  { color: #dc2626; font-size: 16px; font-weight: 700; }
+
+.cp-card-blue-border { border-color: #2563eb; }
+.cp-card-header-blue { background: #eff6ff; }
+
+/* --- Kullanıcı yönetimi --- */
+.cp-total-chip {
+    background: var(--gray-light);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.cp-user-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.cp-user-name-inactive {
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.cp-select-sm {
+    width: auto;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+.cp-btn-sm {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+.cp-btn-sm-danger {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #ef4444;
+    border-color: #fecaca;
+}
+
+.cp-btn-sm-success {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #16a34a;
+    border-color: #bbf7d0;
+}
+
+.cp-protected-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding-right: 4px;
+}
+
+/* --- Canlı gösterge noktası --- */
+.cp-live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #16a34a;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+}
+
+/* --- Badge ID --- */
+.cp-badge-id {
+    font-size: 11px;
+}
+
+/* --- Error sayfası --- */
+.cp-error-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.cp-error-note {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.cp-error-actions {
+    margin-top: 20px;
+}
+
+/* --- Erişim isteği --- */
+.cp-req-room {
+    font-weight: 500;
+    color: var(--blue-text);
+}
+
+.cp-req-reason {
+    color: var(--text-secondary);
+    font-size: 12px;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cp-req-date {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.cp-req-admin-note {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.cp-form-inline {
+    display: inline;
+}
+.cp-check-yes-text { color: #16a34a; }
+.cp-check-no-text  { color: #dc2626; }
